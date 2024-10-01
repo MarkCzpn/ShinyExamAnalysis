@@ -1,0 +1,2855 @@
+<wsdl:definitions xmlns:tns="examserver-v82.wsdl" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns="http://schemas.xmlsoap.org/wsdl/" targetNamespace="examserver-v82.wsdl" name="examsoapserver">
+	<types>
+		<xsd:schema targetNamespace="examserver-v82.wsdl">
+			<xsd:element name="Header" type="tns:Header"/>
+			<xsd:complexType name="Header">
+				<xsd:sequence>
+					<xsd:element name="Ticket" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="Login" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="Password" type="xsd:string" minOccurs="0"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="Coord">
+				<xsd:sequence>
+					<xsd:element name="x" type="xsd:int"/>
+					<xsd:element name="y" type="xsd:int"/>
+					<xsd:element name="w" type="xsd:int"/>
+					<xsd:element name="h" type="xsd:int"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:simpleType name="Alignment">
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="right"/>
+					<xsd:enumeration value="left"/>
+					<xsd:enumeration value="center"/>
+					<xsd:enumeration value="justify"/>
+					<xsd:enumeration value=""/>
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:simpleType name="BatchIdType">
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="VERIFIER_BATCH"/>
+					<xsd:enumeration value="SCAN_BATCH"/>
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:complexType name="ExamFolder">
+				<xsd:all>
+					<xsd:element name="FolderId" type="xsd:int"/>
+					<xsd:element name="UserId" type="xsd:int"/>
+					<xsd:element name="CreateDate" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="FolderName" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="DirTypeId" type="xsd:int"/>
+				</xsd:all>
+			</xsd:complexType>
+			<xsd:complexType name="Exam">
+				<xsd:all>
+					<xsd:element name="ExamId" type="xsd:int" minOccurs="0"/>
+					<xsd:element name="CreateDate" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="ProcessedDate" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="Status" type="xsd:int" minOccurs="0"/>
+					<xsd:element name="StatusName" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="Name" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="ExamCount" type="xsd:int" minOccurs="0"/>
+					<xsd:element name="FormId" type="xsd:int" minOccurs="0"/>
+					<xsd:element name="DynamicFormInfo" type="tns:DynamicFormInfo" minOccurs="0"/>
+					<xsd:element name="FolderId" type="xsd:int" minOccurs="0"/>
+					<xsd:element name="ShortName" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="Open" type="xsd:boolean" minOccurs="0"/>
+					<xsd:element name="PageLinkOffset" type="xsd:int" minOccurs="0"/>
+					<xsd:element name="HasParticipants" type="xsd:boolean" minOccurs="0"/>
+					<xsd:element name="ParticipantCount" type="xsd:int" minOccurs="0"/>
+					<xsd:element name="IsOnline" type="xsd:boolean" minOccurs="0"/>
+					<xsd:element name="TimeLimit" type="xsd:int" minOccurs="0"/>
+					<xsd:element name="IsPreFilled" type="xsd:boolean" minOccurs="0"/>
+					<xsd:element name="ParticipantList" type="tns:ExamParticipantList" minOccurs="0"/>
+					<xsd:element name="ExamType" type="xsd:int" minOccurs="0"/>
+					<xsd:element name="Comment" type="xsd:string" minOccurs="0"/>
+				</xsd:all>
+			</xsd:complexType>
+			<xsd:complexType name="Score">
+				<xsd:all>
+					<xsd:element name="QuestionId" type="xsd:int"/>
+					<xsd:element name="Option" type="xsd:int"/>
+					<xsd:element name="ScoreMarked" type="xsd:float" minOccurs="0"/>
+					<xsd:element name="ScoreUnMarked" type="xsd:float" minOccurs="0"/>
+				</xsd:all>
+			</xsd:complexType>
+			<xsd:complexType name="ExamParticipantList">
+				<xsd:sequence>
+					<xsd:element name="ExamParticipants" type="tns:ExamParticipant" minOccurs="0" maxOccurs="unbounded"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="ExamParticipant">
+				<xsd:all>
+					<xsd:element name="PersonId" type="xsd:int" minOccurs="0"/>
+					<xsd:element name="Email" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="Identifier" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="Title" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="FirstName" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="LastName" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="Gender" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="Address" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="Custom1" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="Custom2" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="Custom3" type="xsd:string" minOccurs="0"/>
+				</xsd:all>
+			</xsd:complexType>
+			<xsd:complexType name="DynamicFormInfo">
+				<xsd:all>
+					<xsd:element name="QuestionCount" type="xsd:int"/>
+					<xsd:element name="OptionsPerQuestion" type="xsd:int" minOccurs="0"/>
+					<xsd:element name="HeaderTemplateFormId" type="xsd:int" minOccurs="0"/>
+				</xsd:all>
+			</xsd:complexType>
+			<xsd:complexType name="GradingKey">
+				<xsd:all>
+					<xsd:element name="Id" type="xsd:int"/>
+					<xsd:element name="StandardExamId" type="xsd:int" minOccurs="0"/>
+					<xsd:element name="CustomExamId" type="xsd:int" minOccurs="0"/>
+					<xsd:element name="UserId" type="xsd:int" minOccurs="0"/>
+					<xsd:element name="Name" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="Comment" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="PassedGradeId" type="xsd:int" minOccurs="0"/>
+					<xsd:element name="PassedGrade" type="tns:Grade" minOccurs="0"/>
+					<xsd:element name="CreateDate" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="MinGroupsToPass" type="xsd:int" minOccurs="0"/>
+					<xsd:element name="Grades" type="tns:GradeList" minOccurs="0"/>
+					<xsd:element name="GroupPassingValues" type="tns:GroupPassingValueList" minOccurs="0"/>
+				</xsd:all>
+			</xsd:complexType>
+			<xsd:complexType name="Grade">
+				<xsd:all>
+					<xsd:element name="Id" type="xsd:int"/>
+					<xsd:element name="GradingKeyId" type="xsd:int" minOccurs="0"/>
+					<xsd:element name="Name" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="Percentage" type="xsd:float" minOccurs="0"/>
+					<xsd:element name="CreateDate" type="xsd:string" minOccurs="0"/>
+				</xsd:all>
+			</xsd:complexType>
+			<xsd:complexType name="GroupPassingValue">
+				<xsd:all>
+					<xsd:element name="Id" type="xsd:int"/>
+					<xsd:element name="GradingKeyId" type="xsd:int" minOccurs="0"/>
+					<xsd:element name="FormGroupId" type="xsd:int" minOccurs="0"/>
+					<xsd:element name="Required" type="xsd:boolean" minOccurs="0"/>
+					<xsd:element name="Percentage" type="xsd:float" minOccurs="0"/>
+				</xsd:all>
+			</xsd:complexType>
+			<xsd:complexType name="ExamFolderList">
+				<xsd:sequence>
+					<xsd:element name="ExamFolders" type="tns:ExamFolder" minOccurs="0" maxOccurs="unbounded"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="ExamList">
+				<xsd:sequence>
+					<xsd:element name="Exams" type="tns:Exam" minOccurs="0" maxOccurs="unbounded"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="ScoreList">
+				<xsd:sequence>
+					<xsd:element name="Scores" type="tns:Score" minOccurs="0" maxOccurs="unbounded"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="GradingKeyList">
+				<xsd:sequence>
+					<xsd:element name="GradingKeys" type="tns:GradingKey" minOccurs="0" maxOccurs="unbounded"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="GradeList">
+				<xsd:sequence>
+					<xsd:element name="Grades" type="tns:Grade" minOccurs="0" maxOccurs="unbounded"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="GroupPassingValueList">
+				<xsd:sequence>
+					<xsd:element name="GroupPassingValue" type="tns:GroupPassingValue" minOccurs="0" maxOccurs="unbounded"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="FileInfo">
+				<xsd:sequence>
+					<xsd:element name="FileName" type="xsd:string" maxOccurs="unbounded"/>
+					<xsd:element name="FileUrl" type="xsd:string" maxOccurs="unbounded"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="ExamSheetInfoList">
+				<xsd:sequence>
+					<xsd:element name="ExamSheetInfos" type="tns:ExamSheetInfo" minOccurs="0" maxOccurs="unbounded"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="ExamSheetInfo">
+				<xsd:sequence>
+					<xsd:element name="ID" type="xsd:int" maxOccurs="unbounded"/>
+					<xsd:element name="Abbreviation" type="xsd:string" maxOccurs="unbounded"/>
+					<xsd:element name="Label" type="xsd:string" maxOccurs="unbounded"/>
+					<xsd:element name="PageNumber" type="xsd:int" maxOccurs="unbounded"/>
+					<xsd:element name="CreationDate" type="xsd:string" maxOccurs="unbounded"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="ExamSheet">
+				<xsd:sequence>
+					<xsd:element name="FormId" type="xsd:int" minOccurs="0"/>
+					<xsd:element name="OwnerId" type="xsd:int"/>
+					<xsd:element name="FormName" type="xsd:string"/>
+					<xsd:element name="FormTitle" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="PaperFormat" type="xsd:string"/>
+					<xsd:element name="ScoreOpenQuestionsOnline" type="xsd:boolean" minOccurs="0"/>
+					<xsd:element name="UseSeparateAnswerSheet" type="xsd:boolean" minOccurs="0"/>
+					<xsd:element name="CreationDate" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="PageCount" type="xsd:int" minOccurs="0"/>
+					<xsd:element name="ShowQuestionNumberLabels" type="xsd:boolean" minOccurs="0"/>
+					<xsd:element name="FontFamily" type="xsd:string"/>
+					<xsd:element name="LineHeight" type="xsd:int"/>
+					<xsd:element name="FontSize" type="xsd:int"/>
+					<xsd:element name="AnswerBoxSize" type="xsd:int"/>
+					<xsd:element name="UpperLeftHeading" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="UpperRightHeading" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="LowerLeftHeading" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="LowerRightHeading" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="GroupList" type="tns:ExamSheetGroupList" minOccurs="0"/>
+					<xsd:element name="OnlineWizard" type="xsd:int" minOccurs="0"/>
+					<xsd:element name="IsExtensible" type="xsd:boolean" minOccurs="0"/>
+					<xsd:element name="Layout" type="xsd:int" minOccurs="0"/>
+					<xsd:element name="Range" type="xsd:int" minOccurs="0"/>
+					<xsd:element name="Version" type="xsd:float" minOccurs="0"/>
+					<xsd:element name="IsAnswerSheetTemplate" type="xsd:boolean" minOccurs="0"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="ExamSheetGroupList">
+				<xsd:sequence>
+					<xsd:element name="ExamSheetGroups" type="tns:ExamSheetGroup" maxOccurs="unbounded" minOccurs="0"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="ExamSheetGroup">
+				<xsd:sequence>
+					<xsd:element name="GroupId" type="xsd:int" minOccurs="0"/>
+					<xsd:element name="Title" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="FontSize" type="xsd:int"/>
+					<xsd:element name="IsTextElement" type="xsd:boolean" minOccurs="0"/>
+					<xsd:element name="Position" type="xsd:int" minOccurs="0"/>
+					<xsd:element name="ItemList" type="tns:ExamSheetGroupItemList" minOccurs="0"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="ExamSheetGroupItemList">
+				<xsd:sequence>
+					<xsd:element name="ExamSheetGroupItems" type="tns:ExamSheetGroupItem" maxOccurs="unbounded" minOccurs="0"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="ExamSheetGroupItem">
+				<xsd:sequence>
+					<xsd:element name="ItemId" type="xsd:int" minOccurs="0"/>
+					<xsd:element name="Type" type="xsd:int"/>
+					<xsd:element name="Text" type="xsd:string"/>
+					<xsd:element name="Difficulty" type="xsd:int" minOccurs="0"/>
+					<xsd:element name="Position" type="xsd:int" minOccurs="0"/>
+					<xsd:element name="Alignment" type="tns:Alignment" minOccurs="0"/>
+					<xsd:element name="OptionCount" type="xsd:int" minOccurs="0"/>
+					<xsd:element name="OptionList" type="tns:ExamSheetGroupItemOptionList" minOccurs="0"/>
+					<xsd:element name="OpenQuestion_LineCount" type="xsd:int" minOccurs="0"/>
+					<xsd:element name="OpenQuestion_AdditionalPages" type="xsd:int" minOccurs="0"/>
+					<xsd:element name="OpenQuestion_MaxCharacters" type="xsd:int" minOccurs="0"/>
+					<xsd:element name="OpenQuestion_MaxScore" type="xsd:float" minOccurs="0"/>
+					<xsd:element name="OptionValue" type="xsd:int" minOccurs="0"/>
+					<xsd:element name="Explanation" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="Reference" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="Shortname" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="Solution" type="xsd:string" minOccurs="0"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="ExamSheetGroupItemOptionList">
+				<xsd:sequence>
+					<xsd:element name="ExamSheetGroupItemOptions" type="tns:ExamSheetGroupItemOption" maxOccurs="unbounded" minOccurs="0"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="ExamSheetGroupItemOption">
+				<xsd:sequence>
+					<xsd:element name="Text" type="xsd:string"/>
+					<xsd:element name="Score" type="xsd:string"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:element name="tSoapfault">
+				<xsd:complexType>
+					<xsd:all>
+						<xsd:element name="sErrorCode" type="xsd:string"/>
+						<xsd:element name="sErrorMessage" type="xsd:string"/>
+						<xsd:element name="sDetails" type="xsd:string"/>
+					</xsd:all>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:complexType name="User">
+				<xsd:all>
+					<xsd:element name="m_nId" type="xsd:int" nillable="true"/>
+					<xsd:element name="m_nType" type="xsd:int" nillable="true"/>
+					<xsd:element name="m_sLoginName" type="xsd:string"/>
+					<xsd:element name="m_sExternalId" type="xsd:string"/>
+					<xsd:element name="m_sTitle" type="xsd:string"/>
+					<xsd:element name="m_sFirstName" type="xsd:string"/>
+					<xsd:element name="m_sSurName" type="xsd:string"/>
+					<xsd:element name="m_sUnitName" type="xsd:string"/>
+					<xsd:element name="m_sAddress" type="xsd:string"/>
+					<xsd:element name="m_sEmail" type="xsd:string"/>
+					<xsd:element name="m_nFbid" type="xsd:int" nillable="true"/>
+					<xsd:element name="m_nAddressId" type="xsd:int" nillable="true"/>
+					<xsd:element name="m_sPassword" type="xsd:string"/>
+					<xsd:element name="m_sPhoneNumber" type="xsd:string"/>
+					<xsd:element name="m_bActiveUser" type="xsd:boolean" nillable="true"/>
+				</xsd:all>
+			</xsd:complexType>
+			<xsd:complexType name="UserList">
+				<xsd:sequence>
+					<xsd:element name="Users" type="tns:User" minOccurs="0" maxOccurs="unbounded"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="SimpleForm">
+				<xsd:all>
+					<xsd:element name="ID" type="xsd:int"/>
+					<xsd:element name="Name" type="xsd:string"/>
+					<xsd:element name="OwnerID" type="xsd:int"/>
+					<xsd:element name="FormEngine" type="xsd:int"/>
+				</xsd:all>
+			</xsd:complexType>
+			<xsd:complexType name="SimpleFormList">
+				<xsd:sequence>
+					<xsd:element name="SimpleForms" type="tns:SimpleForm" minOccurs="0" maxOccurs="unbounded"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="Unit">
+				<xsd:all>
+					<xsd:element name="m_nId" type="xsd:int" nillable="true"/>
+					<xsd:element name="m_sName" type="xsd:string"/>
+					<xsd:element name="m_nPublicUnitNumber" type="xsd:int" nillable="true"/>
+					<xsd:element name="m_nImageAccess" type="xsd:int" nillable="true"/>
+					<xsd:element name="m_sPostCode" type="xsd:string" nillable="true" minOccurs="0"/>
+					<xsd:element name="m_sCity" type="xsd:string" nillable="true" minOccurs="0"/>
+					<xsd:element name="m_sStreet" type="xsd:string" nillable="true" minOccurs="0"/>
+					<xsd:element name="m_sPhoneNumber" type="xsd:string" nillable="true" minOccurs="0"/>
+					<xsd:element name="m_sFax" type="xsd:string" nillable="true" minOccurs="0"/>
+					<xsd:element name="m_sEmail" type="xsd:string" nillable="true" minOccurs="0"/>
+					<xsd:element name="m_aUsers" type="tns:UserList"/>
+					<xsd:element name="m_nLogoId" type="xsd:int" nillable="true" minOccurs="0"/>
+					<xsd:element name="m_sExternalId" type="xsd:string" nillable="true" minOccurs="0"/>
+				</xsd:all>
+			</xsd:complexType>
+			<xsd:complexType name="UnitList">
+				<xsd:sequence>
+					<xsd:element name="Units" type="tns:Unit" minOccurs="0" maxOccurs="unbounded"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="Instructor">
+				<xsd:sequence>
+					<xsd:element name="InstructorUid" type="xsd:string"/>
+					<xsd:element name="InstructorLogin" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="FirstName" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="LastName" type="xsd:string"/>
+					<xsd:element name="Title" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="Gender" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="Email" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="Phone" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="Language" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="IsActiveUser" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="ProjectName" type="xsd:string" minOccurs="0"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="InstructorList">
+				<xsd:sequence>
+					<xsd:element name="Instructors" type="tns:Instructor" maxOccurs="unbounded"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:simpleType name="SubunitIdType">
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="INTERNAL"/>
+					<xsd:enumeration value="NAME"/>
+					<xsd:enumeration value="EXTERNAL"/>
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:simpleType name="FormIdType">
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="INTERNAL"/>
+					<xsd:enumeration value="FORMNAME"/>
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:complexType name="StringList">
+				<xsd:sequence>
+					<xsd:element name="Strings" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="IDList">
+				<xsd:sequence>
+					<xsd:element name="ID" type="xsd:integer" minOccurs="0" maxOccurs="unbounded"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="KeyValuePair">
+				<xsd:all>
+					<xsd:element name="Key" type="xsd:string"/>
+					<xsd:element name="Value" type="xsd:string" nillable="true"/>
+				</xsd:all>
+			</xsd:complexType>
+			<xsd:complexType name="KeyValueList">
+				<xsd:sequence>
+					<xsd:element name="KeyValuePair" type="tns:KeyValuePair" minOccurs="0" maxOccurs="unbounded"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="WebscanBatch">
+				<xsd:all>
+					<xsd:element name="m_nReaderBatchId" type="xsd:int"/>
+					<xsd:element name="m_nBatchId" type="xsd:int"/>
+					<xsd:element name="m_nStatus" type="xsd:int"/>
+					<xsd:element name="m_sText" type="xsd:string"/>
+					<xsd:element name="m_nProceedActionValue" type="xsd:int"/>
+					<xsd:element name="m_sProceedAction" type="xsd:string"/>
+					<xsd:element name="m_nCancelActionValue" type="xsd:int"/>
+					<xsd:element name="m_sCancelAction" type="xsd:string"/>
+				</xsd:all>
+			</xsd:complexType>
+			<xsd:complexType name="WebscanBatchList">
+				<xsd:sequence>
+					<xsd:element name="WebscanBatch" type="tns:WebscanBatch" minOccurs="0" maxOccurs="unbounded"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="OnlineCode">
+				<xsd:all>
+					<xsd:element name="m_sOnlineCode" type="xsd:string"/>
+					<xsd:element name="m_nCodeType" type="xsd:int" nillable="true"/>
+					<xsd:element name="m_nExamId" type="xsd:int" nillable="true"/>
+					<xsd:element name="m_sParticipantIdentifier" type="xsd:string"/>
+					<xsd:element name="m_sDirectOnlineLink" type="xsd:string"/>
+				</xsd:all>
+			</xsd:complexType>
+			<xsd:complexType name="OnlineCodeList">
+				<xsd:sequence>
+					<xsd:element name="OnlineCodes" type="tns:OnlineCode" minOccurs="0" maxOccurs="unbounded"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="UserSession">
+				<xsd:sequence>
+					<xsd:element name="SessionId" type="xsd:string"/>
+					<xsd:element name="ServerIp" type="xsd:string"/>
+					<xsd:element name="UserStartPage" type="xsd:string"/>
+					<xsd:element name="Token" type="xsd:string"/>
+					<xsd:element name="ForwardingKey" type="xsd:string"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="ExamType">
+				<xsd:all>
+					<xsd:element name="m_chExamType" type="xsd:string"/>
+					<xsd:element name="m_sDescription" type="xsd:string"/>
+				</xsd:all>
+			</xsd:complexType>
+			<xsd:complexType name="ExamTypeList">
+				<xsd:sequence>
+					<xsd:element name="ExamTypes" type="tns:ExamType" minOccurs="0" maxOccurs="unbounded"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:simpleType name="UserIdType">
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="INTERNAL"/>
+					<xsd:enumeration value="LOGIN"/>
+					<xsd:enumeration value="EXTERNAL"/>
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:simpleType name="EntityListValue">
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="Subunit"/>
+					<xsd:enumeration value="User"/>
+					<xsd:enumeration value="Exam"/>
+					<xsd:enumeration value="Participant"/>
+					<xsd:enumeration value="Log"/>
+					<xsd:enumeration value="Delivery"/>
+					<xsd:enumeration value="Notices"/>
+					<xsd:enumeration value="Results"/>
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:complexType name="EntityList">
+				<xsd:sequence>
+					<xsd:element name="EntityListValue" type="tns:EntityListValue" minOccurs="0" maxOccurs="unbounded"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="Mail">
+				<xsd:all>
+					<xsd:element name="FromMail" type="xsd:string"/>
+					<xsd:element name="FromName" type="xsd:string"/>
+					<xsd:element name="ToList" type="tns:MailAddressList"/>
+					<xsd:element name="Subject" type="xsd:string"/>
+					<xsd:element name="Body" type="xsd:string"/>
+					<xsd:element name="DeliveryType" type="xsd:int"/>
+					<xsd:element name="CcList" type="tns:MailAddressList" minOccurs="0"/>
+					<xsd:element name="BccList" type="tns:MailAddressList" minOccurs="0"/>
+					<xsd:element name="ScheduledDate" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="Status" type="xsd:int" minOccurs="0"/>
+					<xsd:element name="SurveyID" type="xsd:int" minOccurs="0"/>
+					<xsd:element name="CreationDate" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="ID" type="xsd:int" minOccurs="0"/>
+					<xsd:element name="Errors" type="tns:StringList" minOccurs="0"/>
+				</xsd:all>
+			</xsd:complexType>
+			<xsd:complexType name="MailList">
+				<xsd:sequence>
+					<xsd:element name="Mail" type="tns:Mail" maxOccurs="unbounded"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="MailAddressList">
+				<xsd:sequence>
+					<xsd:element name="MailAddress" type="xsd:string" maxOccurs="unbounded"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="MailSummary">
+				<xsd:all>
+					<xsd:element name="PendingMails" type="tns:IDList"/>
+					<xsd:element name="PendingSchedulerMailsCount" type="xsd:int"/>
+					<xsd:element name="DeliveredMails" type="tns:IDList"/>
+					<xsd:element name="UndeliveredMails" type="tns:IDList"/>
+				</xsd:all>
+			</xsd:complexType>
+			<xsd:complexType name="VerifierSurvey">
+				<xsd:all>
+					<xsd:element name="SurveyId" type="xsd:int"/>
+					<xsd:element name="VerifierBatchs" type="tns:VerifierBatchList"/>
+				</xsd:all>
+			</xsd:complexType>
+			<xsd:complexType name="VerifierBatchList">
+				<xsd:sequence>
+					<xsd:element name="VerifierBatch" type="tns:VerifierBatch" minOccurs="0" maxOccurs="unbounded"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="VerifierBatch">
+				<xsd:all>
+					<xsd:element name="BatchId" type="xsd:int"/>
+					<xsd:element name="PageCount" type="xsd:int"/>
+					<xsd:element name="NonFormsCount" type="xsd:int"/>
+					<xsd:element name="UnlocatedAnswers" type="xsd:int"/>
+					<xsd:element name="Scanstation" type="xsd:string"/>
+					<xsd:element name="VerifierSheets" type="tns:VerifierSheetList"/>
+				</xsd:all>
+			</xsd:complexType>
+			<xsd:complexType name="VerifierSheetList">
+				<xsd:sequence>
+					<xsd:element name="VerifierSheet" type="tns:VerifierSheet" minOccurs="0" maxOccurs="unbounded"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="VerifierSheet">
+				<xsd:all>
+					<xsd:element name="SheetId" type="xsd:int"/>
+					<xsd:element name="BatchId" type="xsd:int"/>
+					<xsd:element name="SheetNumberInBatch" type="xsd:int"/>
+					<xsd:element name="SurveyId" type="xsd:int"/>
+					<xsd:element name="FormId" type="xsd:int"/>
+					<xsd:element name="PageId" type="xsd:int"/>
+					<xsd:element name="SerialNumber" type="xsd:int"/>
+					<xsd:element name="SerialNumberCounter" type="xsd:int"/>
+					<xsd:element name="ParticipantEmail" type="xsd:string"/>
+					<xsd:element name="ParticipantIdentifier" type="xsd:string"/>
+					<xsd:element name="CoverSheet" type="xsd:boolean"/>
+					<xsd:element name="NonFormType" type="xsd:int"/>
+					<xsd:element name="SheetImage" type="xsd:string"/>
+					<xsd:element name="VerifierQuestions" type="tns:VerifierQuestionList"/>
+				</xsd:all>
+			</xsd:complexType>
+			<xsd:complexType name="VerifierQuestionList">
+				<xsd:sequence>
+					<xsd:element name="VerifierQuestion" type="tns:VerifierQuestion" minOccurs="0" maxOccurs="unbounded"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="VerifierQuestion">
+				<xsd:all>
+					<xsd:element name="QuestionId" type="xsd:int"/>
+					<xsd:element name="SheetId" type="xsd:int"/>
+					<xsd:element name="QuestionType" type="xsd:int"/>
+					<xsd:element name="QuestionPosition" type="xsd:int"/>
+					<xsd:element name="DataType" type="xsd:string"/>
+					<xsd:element name="QuestionCoord" type="tns:Coord"/>
+					<xsd:element name="VerifierQuestionAnswers" type="tns:VerifierQuestionAnswerList"/>
+				</xsd:all>
+			</xsd:complexType>
+			<xsd:complexType name="VerifierQuestionAnswerList">
+				<xsd:sequence>
+					<xsd:element name="VerifierQuestionAnswer" type="tns:VerifierQuestionAnswer" minOccurs="0" maxOccurs="unbounded"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="VerifierQuestionAnswer">
+				<xsd:all>
+					<xsd:element name="AnswerOptionValue" type="xsd:string"/>
+					<xsd:element name="AnswerOptionFillingGrade" type="xsd:float"/>
+					<xsd:element name="AnswerPosition" type="xsd:int"/>
+					<xsd:element name="x" type="xsd:int"/>
+					<xsd:element name="y" type="xsd:int"/>
+				</xsd:all>
+			</xsd:complexType>
+			<xsd:complexType name="UserSessionInfo">
+				<xsd:all>
+					<xsd:element name="UserId" type="xsd:int"/>
+					<xsd:element name="UserType" type="xsd:int"/>
+					<xsd:element name="SubunitId" type="xsd:int"/>
+					<xsd:element name="IsAdmin" type="xsd:boolean"/>
+					<xsd:element name="IsSubunitAdmin" type="xsd:boolean"/>
+					<xsd:element name="PenultimateLogin" type="xsd:dateTime"/>
+					<xsd:element name="SessionStart" type="xsd:dateTime"/>
+					<xsd:element name="SessionLastChange" type="xsd:dateTime"/>
+					<xsd:element name="SessionRemainingSeconds" type="xsd:int"/>
+					<xsd:element name="Token" type="xsd:string"/>
+				</xsd:all>
+			</xsd:complexType>
+			<xsd:complexType name="TextTemplateList">
+				<xsd:sequence>
+					<xsd:element name="TextTemplate" type="tns:TextTemplate" minOccurs="0" maxOccurs="unbounded"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="TextTemplate">
+				<xsd:all>
+					<xsd:element name="Id" type="xsd:string"/>
+					<xsd:element name="SystemLanguage" type="xsd:string"/>
+					<xsd:element name="SystemLanguageAbbreviation" type="xsd:string"/>
+					<xsd:element name="Type" type="xsd:string"/>
+					<xsd:element name="FormSpecificText" type="xsd:boolean"/>
+					<xsd:element name="Subject" type="xsd:string"/>
+					<xsd:element name="Text" type="xsd:string"/>
+				</xsd:all>
+			</xsd:complexType>
+			<xsd:complexType name="CustomUserSettingsList">
+				<xsd:sequence>
+					<xsd:element name="CustomUserSetting" type="tns:CustomUserSetting" minOccurs="0" maxOccurs="unbounded"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="CustomUserSetting">
+				<xsd:all>
+					<xsd:element name="SettingKey" type="xsd:string"/>
+					<xsd:element name="SettingValue" type="xsd:string"/>
+				</xsd:all>
+			</xsd:complexType>
+			<xsd:complexType name="ReaderScanBatchParams">
+				<xsd:all>
+					<xsd:element name="BatchIds" type="tns:StringList" minOccurs="0"/>
+					<xsd:element name="DateTimeStart" type="xsd:dateTime" minOccurs="0"/>
+					<xsd:element name="DateTimeEnd" type="xsd:dateTime" minOccurs="0"/>
+				</xsd:all>
+			</xsd:complexType>
+			<xsd:complexType name="UserParams">
+				<xsd:all>
+					<xsd:element name="UserIds" type="tns:StringList" minOccurs="0"/>
+					<xsd:element name="Types" type="tns:StringList" minOccurs="0"/>
+					<xsd:element name="LoginName" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="ExternalID" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="Title" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="FirstName" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="SurName" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="UnitName" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="Email" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="Subunits" type="tns:StringList" minOccurs="0"/>
+					<xsd:element name="ActiveUsers" type="tns:StringList" minOccurs="0"/>
+					<xsd:element name="Limit" type="xsd:int" minOccurs="0"/>
+					<xsd:element name="OrderBy" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="OrderByDirection" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="ExtendedResponseAsJSON" type="xsd:boolean" minOccurs="0"/>
+					<xsd:element name="lastLoginTo" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="LastLoginFrom" type="xsd:string" minOccurs="0"/>
+				</xsd:all>
+			</xsd:complexType>
+			<xsd:complexType name="SoapUsageParams">
+				<xsd:all>
+					<xsd:element name="TimeFrom" type="xsd:dateTime"/>
+					<xsd:element name="UserId" type="xsd:int" minOccurs="0"/>
+					<xsd:element name="TimeTo" type="xsd:dateTime" minOccurs="0"/>
+				</xsd:all>
+			</xsd:complexType>
+			<xsd:complexType name="ExamParams">
+				<xsd:all>
+					<xsd:element name="Name" type="xsd:string"/>
+					<xsd:element name="Subunits" type="tns:StringList" minOccurs="0"/>
+					<xsd:element name="Examiner" type="tns:StringList" minOccurs="0"/>
+					<xsd:element name="Periods" type="tns:StringList" minOccurs="0"/>
+					<xsd:element name="Forms" type="tns:StringList" minOccurs="0"/>
+					<xsd:element name="CourseTypes" type="tns:StringList" minOccurs="0"/>
+					<xsd:element name="Courses" type="tns:StringList" minOccurs="0"/>
+					<xsd:element name="ProgramOfStudies" type="tns:StringList" minOccurs="0"/>
+					<xsd:element name="Statuses" type="tns:StringList" minOccurs="0"/>
+					<xsd:element name="Types" type="tns:StringList" minOccurs="0"/>
+					<xsd:element name="OpenState" type="xsd:int" minOccurs="0"/>
+					<xsd:element name="Limit" type="xsd:int" minOccurs="0"/>
+					<xsd:element name="OrderBy" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="OrderByDirection" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="ExtendedResponseAsJSON" type="xsd:boolean" minOccurs="0"/>
+					<xsd:element name="CreationDateFrom" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="CreationDateTo" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="LastChangeDateFrom" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="LastChangeDateTo" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="showType" type="xsd:int" minOccurs="0"/>
+					<xsd:element name="Ids" type="tns:StringList" minOccurs="0"/>
+				</xsd:all>
+			</xsd:complexType>
+			<xsd:complexType name="ExamScore">
+				<xsd:all>
+					<xsd:element name="ExamMaxScore" type="xsd:float"/>
+					<xsd:element name="GroupMaxScores" type="tns:GroupMaxScores" minOccurs="0"/>
+				</xsd:all>
+			</xsd:complexType>
+			<xsd:complexType name="GroupMaxScores">
+				<xsd:all>
+					<xsd:element name="GroupMaxScore" type="xsd:float"/>
+					<xsd:element name="ItemMaxScores" type="tns:ItemMaxScores" minOccurs="0"/>
+				</xsd:all>
+			</xsd:complexType>
+			<xsd:complexType name="ItemMaxScores">
+				<xsd:all>
+					<xsd:element name="ItemMaxScore" type="xsd:float"/>
+				</xsd:all>
+			</xsd:complexType>
+			<xsd:complexType name="SubunitLogo">
+				<xsd:all>
+					<xsd:element name="LogoId" type="xsd:int" nillable="true"/>
+					<xsd:element name="Name" type="xsd:string"/>
+					<xsd:element name="IsDefaultLogo" type="xsd:boolean" nillable="true"/>
+					<xsd:element name="URL" type="xsd:string"/>
+				</xsd:all>
+			</xsd:complexType>
+			<xsd:complexType name="SubunitLogoList">
+				<xsd:sequence>
+					<xsd:element name="SubunitLogo" type="tns:SubunitLogo" minOccurs="0" maxOccurs="unbounded"/>
+				</xsd:sequence>
+			</xsd:complexType>
+
+			<xsd:simpleType name="ActivityType">
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="DELETE"/>
+					<xsd:enumeration value="INSERT"/>
+					<xsd:enumeration value="UPDATE"/>
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:simpleType name="ActivityObjectType">
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="SUBUNIT"/>
+					<xsd:enumeration value="USER"/>
+					<xsd:enumeration value="COURSE"/>
+					<xsd:enumeration value="SURVEY"/>
+					<xsd:enumeration value="FORM"/>
+					<xsd:enumeration value="FOLDER"/>
+					<xsd:enumeration value="PSWD"/>
+					<xsd:enumeration value="DATASET"/>
+					<xsd:enumeration value="IMAGE"/>
+					<xsd:enumeration value="LOGENTRY"/>
+					<xsd:enumeration value="PERSON"/>
+					<xsd:enumeration value="PERSON_CUSTOM_FIELDS"/>
+					<xsd:enumeration value="PERSON_TO_COURSE"/>
+					<xsd:enumeration value="PERSON_TO_SURVEY"/>
+					<xsd:enumeration value="TASK"/>
+					<xsd:enumeration value="TASK_ONLINE_SURVEY_EMAIL"/>
+					<xsd:enumeration value="TASK_ONLINE_SURVEY_EMAIL_TO_RESPONDANT"/>
+				</xsd:restriction>
+			</xsd:simpleType>
+
+			<xsd:complexType name="ActivityLog">
+				<xsd:all>
+					<xsd:element name="logId" type="xsd:int"/>
+					<xsd:element name="date" type="xsd:string"/>
+					<xsd:element name="activityType" type="tns:ActivityType"/>
+					<xsd:element name="objectType" type="tns:ActivityObjectType" nillable="true"/>
+					<xsd:element name="objectDescription" type="xsd:string" nillable="true"/>
+					<xsd:element name="objectId" type="xsd:string" nillable="true"/>
+					<xsd:element name="transactionId" type="xsd:string" nillable="true"/>
+
+				</xsd:all>
+			</xsd:complexType>
+			<xsd:complexType name="ActivityLogList">
+				<xsd:sequence>
+					<xsd:element name="ActivityLogs" type="tns:ActivityLog" minOccurs="0" maxOccurs="unbounded"/>
+				</xsd:sequence>
+			</xsd:complexType>
+
+			<xsd:complexType name="IntegrationHubEntry">
+				<xsd:all>
+					<xsd:element name="id" type="xsd:int"/>
+					<xsd:element name="lms_type" type="xsd:string"/>
+					<xsd:element name="settings" type="xsd:string"/>
+				</xsd:all>
+			</xsd:complexType>
+
+			<xsd:complexType name="IntegrationHubEntryList">
+				<xsd:sequence>
+					<xsd:element name="IntegrationHubEntry" type="tns:IntegrationHubEntry" minOccurs="0" maxOccurs="unbounded"/>
+				</xsd:sequence>
+			</xsd:complexType>
+
+		</xsd:schema>
+	</types>
+
+	<message name="Header">
+		<part name="Header" element="tns:Header"/>
+	</message>
+	<message name="RequestTicketRequest">
+		<part name="Login" type="xsd:string"/>
+		<part name="Password" type="xsd:string"/>
+	</message>
+	<message name="RequestTicketResponse">
+		<part name="Ticket" type="xsd:string"/>
+	</message>
+	<message name="GetExamFolderRequest">
+		<part name="ExamFolderId" type="xsd:int"/>
+	</message>
+	<message name="GetExamFolderResponse">
+		<part name="ExamFolder" type="tns:ExamFolder"/>
+	</message>
+	<message name="InsertExamFolderRequest">
+		<part name="ExamFolder" type="tns:ExamFolder"/>
+	</message>
+	<message name="InsertExamFolderResponse">
+		<part name="ExamFolder" type="tns:ExamFolder"/>
+	</message>
+	<message name="UpdateExamFolderRequest">
+		<part name="ExamFolder" type="tns:ExamFolder"/>
+	</message>
+	<message name="UpdateExamFolderResponse">
+		<part name="ExamFolder" type="tns:ExamFolder"/>
+	</message>
+	<message name="GetAllExamFoldersRequest">
+		<part name="UserId" type="xsd:int"/>
+	</message>
+	<message name="GetAllExamFoldersResponse">
+		<part name="ExamFolderList" type="tns:ExamFolderList"/>
+	</message>
+	<message name="GetAllExamsByFolderIdRequest">
+		<part name="FolderId" type="xsd:int"/>
+		<part name="WithParticipants" type="xsd:boolean"/>
+	</message>
+	<message name="GetAllExamsByFolderIdResponse">
+		<part name="ExamList" type="tns:ExamList"/>
+	</message>
+	<message name="GetGradingKeyRequest">
+		<part name="GradingKeyId" type="xsd:int"/>
+	</message>
+	<message name="GetGradingKeyResponse">
+		<part name="GradingKey" type="tns:GradingKey"/>
+	</message>
+	<message name="GetAllGradingKeysRequest">
+		<part name="UserId" type="xsd:int"/>
+		<part name="IncludeCustomGradingKeys" type="xsd:boolean"/>
+	</message>
+	<message name="GetAllGradingKeysResponse">
+		<part name="GradingKeys" type="tns:GradingKeyList"/>
+	</message>
+	<message name="AssignGradingKeyRequest">
+		<part name="ExamId" type="xsd:int"/>
+		<part name="GradingKeyId" type="xsd:int"/>
+	</message>
+	<message name="AssignGradingKeyResponse">
+		<part name="Success" type="xsd:boolean"/>
+	</message>
+	<message name="InsertGradingKeyRequest">
+		<part name="GradingKey" type="tns:GradingKey"/>
+	</message>
+	<message name="InsertGradingKeyResponse">
+		<part name="GradingKey" type="tns:GradingKey"/>
+	</message>
+	<message name="UpdateGradingKeyRequest">
+		<part name="GradingKey" type="tns:GradingKey"/>
+	</message>
+	<message name="UpdateGradingKeyResponse">
+		<part name="GradingKey" type="tns:GradingKey"/>
+	</message>
+	<message name="DeleteGradingKeyRequest">
+		<part name="GradingKeyId" type="xsd:int"/>
+	</message>
+	<message name="DeleteGradingKeyResponse">
+		<part name="Success" type="xsd:boolean"/>
+	</message>
+	<message name="GetExamResultsRequest">
+		<part name="ExamId" type="xsd:int"/>
+		<part name="ExportType" type="xsd:string"/>
+	</message>
+	<message name="GetExamResultsResponse">
+		<part name="FilePath" type="xsd:string"/>
+	</message>
+	<message name="DeleteExamFolderRequest">
+		<part name="ExamFolderId" type="xsd:int"/>
+	</message>
+	<message name="DeleteExamFolderResponse">
+		<part name="Success" type="xsd:boolean"/>
+	</message>
+	<message name="GetExamRequest">
+		<part name="ExamId" type="xsd:int"/>
+		<part name="WithParticipants" type="xsd:boolean"/>
+	</message>
+	<message name="GetExamResponse">
+		<part name="Exam" type="tns:Exam"/>
+	</message>
+	<message name="DeleteExamRequest">
+		<part name="ExamId" type="xsd:int"/>
+	</message>
+	<message name="DeleteExamResponse">
+		<part name="Success" type="xsd:boolean"/>
+	</message>
+	<message name="InsertExamRequest">
+		<part name="Exam" type="tns:Exam"/>
+	</message>
+	<message name="InsertExamResponse">
+		<part name="Exam" type="tns:Exam"/>
+	</message>
+	<message name="SetScoringRequest">
+		<part name="FormId" type="xsd:int"/>
+		<part name="ScoreList" type="tns:ScoreList"/>
+	</message>
+	<message name="SetScoringResponse">
+		<part name="Success" type="xsd:boolean"/>
+	</message>
+	<message name="UpdateExamRequest">
+		<part name="Exam" type="tns:Exam"/>
+		<part name="DeleteExistingParticipants" type="xsd:boolean"/>
+		<part name="CloseExam" type="xsd:boolean"/>
+	</message>
+	<message name="UpdateExamResponse">
+		<part name="Exam" type="tns:Exam"/>
+	</message>
+	<message name="GetExamPswdsRequest">
+		<part name="ExamId" type="xsd:int"/>
+	</message>
+	<message name="GetExamPswdsResponse">
+		<part name="FilePath" type="xsd:string"/>
+	</message>
+	<message name="GenerateExamPswdsRequest">
+		<part name="ExamId" type="xsd:int"/>
+		<part name="PswdCount" type="xsd:int"/>
+	</message>
+	<message name="GenerateExamPswdsResponse">
+		<part name="FilePath" type="xsd:string"/>
+	</message>
+	<message name="GetExamPdfRequest">
+		<part name="ExamId" type="xsd:int"/>
+		<part name="Copies" type="xsd:int"/>
+		<part name="SerialNumber" type="xsd:int"/>
+		<part name="ParticipantIdentifier" type="xsd:string"/>
+	</message>
+	<message name="GetExamPdfResponse">
+		<part name="FilePath" type="xsd:string"/>
+	</message>
+	<message name="GetExamGlobalSheetPdfRequest">
+		<part name="ExamId" type="xsd:int"/>
+	</message>
+	<message name="GetExamGlobalSheetPdfResponse">
+		<part name="FilePath" type="xsd:string"/>
+	</message>
+
+	<message name="GetAnswerKeyByExamIdRequest">
+		<part name="ExamId" type="xsd:int"/>
+	</message>
+	<message name="GetAnswerKeyByExamIdResponse">
+		<part name="FilePath" type="xsd:string"/>
+	</message>
+	<message name="GetAnswerKeyByFormIdRequest">
+		<part name="FormId" type="xsd:int"/>
+	</message>
+	<message name="GetAnswerKeyByFormIdResponse">
+		<part name="FilePath" type="xsd:string"/>
+	</message>
+	<message name="GetPreviewOfExamSheetRequest">
+		<part name="ExamSheetId" type="xsd:int"/>
+	</message>
+	<message name="GetPreviewOfExamSheetResponse">
+		<part name="ExamSheetPreviewUrl" type="xsd:string"/>
+	</message>
+	<message name="ExportExamSheetRequest">
+		<part name="ExamSheetId" type="xsd:int"/>
+	</message>
+	<message name="ExportExamSheetResponse">
+		<part name="FileInfo" type="tns:FileInfo"/>
+	</message>
+	<message name="GetAllExamSheetsRequest">
+		<part name="UserId" type="xsd:int"/>
+	</message>
+	<message name="GetAllExamSheetsResponse">
+		<part name="ExamSheetInfoList" type="tns:ExamSheetInfoList"/>
+	</message>
+	<message name="DeleteExamSheetRequest">
+		<part name="ExamSheetId" type="xsd:int"/>
+	</message>
+	<message name="DeleteExamSheetResponse">
+		<part name="Success" type="xsd:boolean"/>
+	</message>
+	<message name="GetExamSheetRequest">
+		<part name="ExamSheetId" type="xsd:int"/>
+	</message>
+	<message name="GetExamSheetResponse">
+		<part name="ExamSheet" type="tns:ExamSheet"/>
+	</message>
+	<message name="InsertExamSheetRequest">
+		<part name="ExamSheet" type="tns:ExamSheet"/>
+	</message>
+	<message name="InsertExamSheetResponse">
+		<part name="ExamSheet" type="tns:ExamSheet"/>
+	</message>
+	<message name="SoapfaultMessage">
+		<part name="return" element="tns:tSoapfault"/>
+	</message>
+	<message name="GetPswdsByExamRequest">
+		<part name="nExamId" type="xsd:int"/>
+		<part name="nPswdCount" type="xsd:int"/>
+		<part name="nCodeTypes" type="xsd:int"/>
+	</message>
+	<message name="GetPswdsByExamResponse">
+		<part name="ObjectList" type="tns:OnlineCodeList"/>
+	</message>
+	<message name="GetSubunitsRequest">
+	</message>
+	<message name="GetSubunitsResponse">
+		<part name="UnitList" type="tns:UnitList"/>
+	</message>
+	<message name="InsertSubunitRequest">
+		<part name="Unit" type="tns:Unit"/>
+	</message>
+	<message name="InsertSubunitResponse">
+		<part name="Unit" type="tns:Unit"/>
+	</message>
+	<message name="CloseExamRequest">
+		<part name="nExamId" type="xsd:int"/>
+	</message>
+	<message name="CloseExamResponse">
+		<part name="bUpdateSuccess" type="xsd:boolean"/>
+	</message>
+	<message name="OpenExamRequest">
+		<part name="nExamId" type="xsd:int"/>
+	</message>
+	<message name="OpenExamResponse">
+		<part name="bUpdateSuccess" type="xsd:boolean"/>
+	</message>
+	<message name="IsPswdUnusedRequest">
+		<part name="sPSWD" type="xsd:string"/>
+	</message>
+	<message name="IsPswdUnusedResponse">
+		<part name="bPswdIsUnused" type="xsd:boolean"/>
+	</message>
+	<message name="GetPDFReportRequest">
+		<part name="nExamId" type="xsd:int"/>
+		<part name="nUserId" type="xsd:int"/>
+		<part name="nCustomPDFId" type="xsd:int"/>
+		<part name="nLanguageID" type="xsd:int"/>
+	</message>
+	<message name="GetPDFReportResponse">
+		<part name="ReportLink" type="xsd:string"/>
+	</message>
+	<message name="GetPswdsByParticipantRequest">
+		<part name="ParticipantIdentifier" type="xsd:string"/>
+	</message>
+	<message name="GetPswdsByParticipantResponse">
+		<part name="ObjectList" type="tns:OnlineCodeList"/>
+	</message>
+	<message name="GetPDFPswdRequest">
+		<part name="ExamId" type="xsd:int"/>
+	</message>
+	<message name="GetPDFPswdResponse">
+		<part name="HyperLink" type="xsd:string"/>
+	</message>
+	<message name="InsertUserRequest">
+		<part name="User" type="tns:User"/>
+	</message>
+	<message name="InsertUserResponse">
+		<part name="User" type="tns:User"/>
+	</message>
+	<message name="UpdateUserRequest">
+		<part name="User" type="tns:User"/>
+	</message>
+	<message name="UpdateUserResponse">
+		<part name="User" type="tns:User"/>
+	</message>
+	<message name="DeleteUserRequest">
+		<part name="UserId" type="xsd:string"/>
+		<part name="IdType" type="tns:UserIdType"/>
+	</message>
+	<message name="DeleteUserResponse">
+		<part name="Success" type="xsd:boolean"/>
+	</message>
+	<message name="GetUserRequest">
+		<part name="UserId" type="xsd:string"/>
+		<part name="IdType" type="tns:UserIdType"/>
+	</message>
+	<message name="GetUserResponse">
+		<part name="User" type="tns:User"/>
+	</message>
+	<message name="GetUsersBySubunitRequest">
+		<part name="nSubunitId" type="xsd:int"/>
+	</message>
+	<message name="GetUsersBySubunitResponse">
+		<part name="UserList" type="tns:UserList"/>
+	</message>
+	<message name="GetSubunitRequest">
+		<part name="SubunitId" type="xsd:string"/>
+		<part name="IdType" type="tns:SubunitIdType"/>
+		<part name="IncludeExaminers" type="xsd:boolean"/>
+	</message>
+	<message name="GetSubunitResponse">
+		<part name="Unit" type="tns:Unit"/>
+	</message>
+	<message name="DeleteSubunitRequest">
+		<part name="SubunitId" type="xsd:string"/>
+		<part name="IdType" type="tns:SubunitIdType"/>
+	</message>
+	<message name="DeleteSubunitResponse">
+		<part name="Success" type="xsd:boolean"/>
+	</message>
+	<message name="DeleteUnusedPswdsRequest">
+		<part name="ObjectList" type="tns:OnlineCodeList"/>
+	</message>
+	<message name="DeleteUnusedPswdsResponse">
+		<part name="ObjectList" type="tns:OnlineCodeList"/>
+	</message>
+	<message name="GetSimpleFormRequest">
+		<part name="FormId" type="xsd:string"/>
+		<part name="IdType" type="tns:FormIdType"/>
+		<part name="IncludeCustomReports" type="xsd:boolean"/>
+		<part name="IncludeUsageRestrictions" type="xsd:boolean"/>
+	</message>
+	<message name="GetSimpleFormResponse">
+		<part name="SimpleForm" type="tns:SimpleForm"/>
+	</message>
+	<message name="GetAccessibleSubunitsForSubunitAdminRequest">
+		<part name="nUserId" type="xsd:int"/>
+	</message>
+	<message name="GetAccessibleSubunitsForSubunitAdminResponse">
+		<part name="UnitList" type="tns:UnitList"/>
+	</message>
+	<message name="GetVFDRequest">
+		<part name="FormId" type="xsd:int"/>
+		<part name="IncludeSecondaryData" type="xsd:boolean"/>
+	</message>
+	<message name="GetVFDResponse">
+		<part name="HyperLink" type="xsd:string"/>
+	</message>
+	<message name="GetExamOriginalScansPDFRequest">
+		<part name="ExamId" type="xsd:int"/>
+		<part name="SheetId" type="xsd:int"/>
+		<part name="BatchId" type="xsd:int"/>
+	</message>
+	<message name="GetExamOriginalScansPDFResponse">
+		<part name="PDFLink" type="xsd:string"/>
+	</message>
+	<message name="GetWebscanBatchListRequest">
+		<part name="UserId" type="xsd:int"/>
+		<part name="Language" type="xsd:string"/>
+		<part name="BatchStatusIDList" type="tns:IDList"/>
+	</message>
+	<message name="GetWebscanBatchListResponse">
+		<part name="WebscanBatchList" type="tns:WebscanBatchList"/>
+	</message>
+	<message name="ApplyActionOnWebscanBatchRequest">
+		<part name="BatchId" type="xsd:int"/>
+		<part name="Action" type="xsd:int"/>
+	</message>
+	<message name="ApplyActionOnWebscanBatchResponse">
+		<part name="result" type="xsd:boolean"/>
+	</message>
+	<message name="GetCSVRawDataRequest">
+		<part name="ExamId" type="xsd:int"/>
+	</message>
+	<message name="GetCSVRawDataResponse">
+		<part name="HyperLink" type="xsd:string"/>
+	</message>
+	<message name="GetOnlineExamLinkByParticipantRequest">
+		<part name="ExamId" type="xsd:integer"/>
+		<part name="ParticipantIdentifier" type="xsd:string"/>
+		<part name="AutoIncreasePSWDCount" type="xsd:boolean"/>
+	</message>
+	<message name="GetOnlineExamLinkByParticipantResponse">
+		<part name="OnlineExamLink" type="xsd:string"/>
+	</message>
+	<message name="GetSessionForUserRequest">
+		<part name="UserId" type="xsd:string"/>
+		<part name="IdType" type="tns:UserIdType"/>
+	</message>
+	<message name="GetSessionForUserResponse">
+		<part name="SessionModel" type="tns:UserSession"/>
+	</message>
+	<message name="GetExamTypesRequest">
+	</message>
+	<message name="GetExamTypesResponse">
+		<part name="ExamTypeList" type="tns:ExamTypeList"/>
+	</message>
+	<message name="AddEMailsToQueueRequest">
+		<part name="Mails" type="tns:MailList"/>
+	</message>
+	<message name="AddEMailsToQueueResponse">
+		<part name="Mails" type="tns:MailList"/>
+	</message>
+	<message name="GetEMailsByIDListRequest">
+		<part name="MailIDList" type="tns:IDList"/>
+		<part name="Status" type="xsd:int"/>
+	</message>
+	<message name="GetEMailsByIDListResponse">
+		<part name="Mails" type="tns:MailList"/>
+	</message>
+	<message name="GetEMailSummaryByCreationDateRequest">
+		<part name="CreationDate" type="xsd:string"/>
+	</message>
+	<message name="GetEMailSummaryByCreationDateResponse">
+		<part name="Summary" type="tns:MailSummary"/>
+	</message>
+	<message name="GetVerifierInfoBySurveyRequest">
+		<part name="ExamId" type="xsd:int"/>
+	</message>
+	<message name="GetVerifierInfoBySurveyResponse">
+		<part name="VerifierSurvey" type="tns:VerifierSurvey"/>
+	</message>
+	<message name="GetVerifierInfoBySerialNumberRequest">
+		<part name="ExamId" type="xsd:int"/>
+		<part name="SerialNumber" type="xsd:int"/>
+		<part name="SerialNumberCounter" type="xsd:int"/>
+	</message>
+	<message name="GetVerifierInfoBySerialNumberResponse">
+		<part name="VerifierSurvey" type="tns:VerifierSurvey"/>
+	</message>
+	<message name="GetVerifierInfoByParticipantRequest">
+		<part name="ExamId" type="xsd:int"/>
+		<part name="ParticipantIdentifier" type="xsd:string"/>
+	</message>
+	<message name="GetVerifierInfoByParticipantResponse">
+		<part name="VerifierSurvey" type="tns:VerifierSurvey"/>
+	</message>
+	<message name="GetVerifierInfoByBatchRequest">
+		<part name="BatchId" type="xsd:int"/>
+		<part name="BatchIdType" type="tns:BatchIdType"/>
+		<part name="ExamId" type="xsd:int"/>
+	</message>
+	<message name="GetVerifierInfoByBatchResponse">
+		<part name="VerifierBatch" type="tns:VerifierBatch"/>
+	</message>
+	<message name="GetUserSessionInfoRequest">
+		<part name="SessionId" type="xsd:string"/>
+		<part name="ResumeSession" type="xsd:boolean"/>
+	</message>
+	<message name="GetUserSessionInfoResponse">
+		<part name="UserSessionInfo" type="tns:UserSessionInfo"/>
+	</message>
+	<message name="GetConfigurationInfoRequest">
+		<part name="UserId" type="xsd:integer"/>
+	</message>
+	<message name="GetConfigurationInfoResponse">
+		<part name="ConfigurationInfo" type="tns:KeyValueList"/>
+	</message>
+	<message name="DeleteFormsRequest">
+		<part name="FormIDList" type="tns:IDList"/>
+	</message>
+	<message name="DeleteFormsResponse">
+		<part name="FormsDeletionInfo" type="tns:KeyValueList"/>
+	</message>
+	<message name="GetUserByLoginRequest">
+		<part name="Login" type="xsd:string"/>
+		<part name="Password" type="xsd:string"/>
+	</message>
+	<message name="GetUserByLoginResponse">
+		<part name="User" type="tns:User"/>
+	</message>
+	<message name="ResetExamRequest">
+		<part name="ExamId" type="xsd:int"/>
+	</message>
+	<message name="ResetExamResponse">
+		<part name="result" type="xsd:boolean"/>
+	</message>
+	<message name="AssignVolumeToSubunitRequest">
+		<part name="SubunitId" type="xsd:int"/>
+		<part name="Volume" type="xsd:int"/>
+	</message>
+	<message name="AssignVolumeToSubunitResponse">
+		<part name="result" type="xsd:boolean"/>
+	</message>
+	<message name="GetAllTextTemplateIDsRequest">
+	</message>
+	<message name="GetAllTextTemplateIDsResponse">
+		<part name="TextTemplateIDs" type="tns:StringList"/>
+	</message>
+	<message name="GetTextTemplateByIdRequest">
+		<part name="TextTemplateId" type="xsd:string"/>
+		<part name="FormId" type="xsd:int"/>
+	</message>
+	<message name="GetTextTemplateByIdResponse">
+		<part name="TextTemplateList" type="tns:TextTemplateList"/>
+	</message>
+	<message name="GetUserByIdConsiderExternalIDRequest">
+		<part name="UserId" type="xsd:string"/>
+		<part name="IdType" type="tns:UserIdType"/>
+	</message>
+	<message name="GetUserByIdConsiderExternalIDResponse">
+		<part name="User" type="tns:UserList"/>
+	</message>
+	<message name="SaveCustomUserSettingRequest">
+		<part name="SettingKey" type="xsd:string"/>
+		<part name="SettingValue" type="xsd:string"/>
+	</message>
+	<message name="SaveCustomUserSettingResponse">
+		<part name="ActionResponse" type="xsd:string"/>
+	</message>
+	<message name="DeleteCustomUserSettingRequest">
+		<part name="SettingKey" type="xsd:string"/>
+	</message>
+	<message name="DeleteCustomUserSettingResponse">
+		<part name="ActionResponse" type="xsd:string"/>
+	</message>
+	<message name="GetCustomUserSettingRequest">
+		<part name="SettingKey" type="xsd:string"/>
+	</message>
+	<message name="GetCustomUserSettingResponse">
+		<part name="CustomUserSetting" type="tns:CustomUserSetting"/>
+	</message>
+	<message name="GetCustomUserSettingsListRequest">
+	</message>
+	<message name="GetCustomUserSettingsListResponse">
+		<part name="CustomUserSettingsList" type="tns:CustomUserSettingsList"/>
+	</message>
+	<message name="GetReaderScanBatchListRequest">
+		<part name="Params" type="tns:ReaderScanBatchParams"/>
+	</message>
+	<message name="GetReaderScanBatchListResponse">
+		<part name="Success" type="tns:StringList"/>
+	</message>
+	<message name="GetLicenseInformationRequest">
+	</message>
+	<message name="GetLicenseInformationResponse">
+		<part name="LicenseInformation" type="tns:KeyValueList"/>
+	</message>
+	<message name="GetAllAvailableTransactionsByUserLoginRequest">
+		<part name="SoapLoginName" type="xsd:string"/>
+	</message>
+	<message name="GetAllAvailableTransactionsByUserLoginResponse">
+		<part name="TransactionList" type="tns:KeyValueList"/>
+	</message>
+	<message name="GetEntitiesByKeywordRequest">
+		<part name="Keyword" type="xsd:string"/>
+		<part name="EntityList" type="tns:EntityList"/>
+	</message>
+	<message name="GetEntitiesByKeywordResponse">
+		<part name="Entities" type="tns:StringList"/>
+	</message>
+	<message name="GetUserIdsByParamsRequest">
+		<part name="Params" type="tns:UserParams"/>
+	</message>
+	<message name="GetUserIdsByParamsResponse">
+		<part name="Users" type="tns:StringList"/>
+	</message>
+	<message name="GetSoapUsageRequest">
+		<part name="SoapUsageParams" type="tns:SoapUsageParams"/>
+	</message>
+	<message name="GetSoapUsageResponse">
+		<part name="Response" type="tns:StringList"/>
+	</message>
+	<message name="UpdateProfileImageRequest">
+		<part name="UserId" type="xsd:int"/>
+		<part name="ProfileImagePath" type="xsd:string"/>
+	</message>
+	<message name="UpdateProfileImageResponse">
+		<part name="Response" type="xsd:boolean"/>
+	</message>
+	<message name="DestroySessionForUserRequest">
+		<part name="UserId" type="xsd:int"/>
+	</message>
+	<message name="DestroySessionForUserResponse">
+		<part name="result" type="xsd:boolean"/>
+	</message>
+	<message name="DeleteOldLogEntriesRequest">
+		<part name="DaysOfRetention" type="xsd:int"/>
+	</message>
+	<message name="DeleteOldLogEntriesResponse">
+		<part name="Response" element="tns:tSoapfault"/>
+	</message>
+	<message name="DeleteOldActivityLogEntriesRequest">
+		<part name="DaysOfRetention" type="xsd:int"/>
+		<part name="transactionList" type="tns:StringList"/>
+	</message>
+	<message name="DeleteOldActivityLogEntriesResponse">
+		<part name="Response" element="tns:tSoapfault"/>
+	</message>
+
+	<message name="GetActivityLogEntriesRequest">
+		<part name="startDate" type="xsd:string"/>
+		<part name="startLogId" type="xsd:int"/>
+		<part name="count" type="xsd:int"/>
+		<part name="ActivityType" type="tns:ActivityType"/>
+		<part name="ObjectType" type="tns:ActivityObjectType"/>
+		<part name="objectId" type="xsd:string"/>
+		<part name="transactionId" type="xsd:string"/>
+	</message>
+	<message name="GetActivityLogEntriesResponse">
+		<part name="ActivityLogs" type="tns:ActivityLogList"/>
+	</message>
+
+	<message name="DeleteOldDeliveriesRequest">
+		<part name="DaysOfRetention" type="xsd:int"/>
+	</message>
+	<message name="DeleteOldDeliveriesResponse">
+		<part name="Response" element="tns:tSoapfault"/>
+	</message>
+	<message name="getExamIdsByParamsRequest">
+		<part name="Params" type="tns:ExamParams"/>
+	</message>
+	<message name="getExamIdsByParamsResponse">
+		<part name="ExamIds" type="tns:StringList"/>
+	</message>
+	<message name="GetOnlineQRCodeRequest">
+		<part name="ExamId" type="xsd:int"/>
+	</message>
+	<message name="GetOnlineQRCodeResponse">
+		<part name="QrCodeLink" type="xsd:string"/>
+	</message>
+	<message name="GetScoringRequest">
+		<part name="ExamId" type="xsd:int"/>
+	</message>
+	<message name="GetScoringResponse">
+		<part name="Scores" type="xsd:ExamScore"/>
+	</message>
+	<message name="GetSubunitLogosRequest">
+	</message>
+	<message name="GetSubunitLogosResponse">
+		<part name="SubunitLogoList" type="tns:SubunitLogoList"/>
+	</message>
+	<message name="UpdateSubunitRequest">
+		<part name="Unit" type="tns:Unit"/>
+	</message>
+	<message name="UpdateSubunitResponse">
+		<part name="Unit" type="tns:Unit"/>
+	</message>
+
+	<portType name="SoapPort">
+		<operation name="RequestTicket">
+			<documentation>Gets a ticket string which can be used for further SOAP communication with the web server ("ticket" in the SOAP header). The ticket has a lifetime of 20 minutes and gets invalid if there is no transaction using the ticket. Alternatively it is possible to use the credentials ("login" + "password") directly in the SOAP header.</documentation>
+			<input message="tns:RequestTicketRequest"/>
+			<output message="tns:RequestTicketResponse"/>
+			<fault name="fault" message="tns:SoapfaultMessage"/>
+		</operation>
+		<operation name="GetExamFolder">
+			<documentation>Return an exam folder object for an given folder ID.</documentation>
+			<input message="tns:GetExamFolderRequest"/>
+			<output message="tns:GetExamFolderResponse"/>
+			<fault name="fault" message="tns:SoapfaultMessage"/>
+		</operation>
+		<operation name="InsertExamFolder">
+			<documentation>Insert an exam folder for an exam user. The returned exam folder object contains the folder ID.</documentation>
+			<input message="tns:InsertExamFolderRequest"/>
+			<output message="tns:InsertExamFolderResponse"/>
+			<fault name="fault" message="tns:SoapfaultMessage"/>
+		</operation>
+		<operation name="UpdateExamFolder">
+			<documentation>Update an exam folder.</documentation>
+			<input message="tns:UpdateExamFolderRequest"/>
+			<output message="tns:UpdateExamFolderResponse"/>
+			<fault name="fault" message="tns:SoapfaultMessage"/>
+		</operation>
+		<operation name="GetAllExamFolders">
+			<documentation>Return a list of exam folder objects for a given user ID.</documentation>
+			<input message="tns:GetAllExamFoldersRequest"/>
+			<output message="tns:GetAllExamFoldersResponse"/>
+			<fault name="fault" message="tns:SoapfaultMessage"/>
+		</operation>
+		<operation name="GetAllExamsByFolderId">
+			<documentation>Return a list of exam objects for a given exam folder ID.</documentation>
+			<input message="tns:GetAllExamsByFolderIdRequest"/>
+			<output message="tns:GetAllExamsByFolderIdResponse"/>
+			<fault name="fault" message="tns:SoapfaultMessage"/>
+		</operation>
+		<operation name="GetGradingKey">
+			<documentation>Return the grading key object for a given grading key ID.</documentation>
+			<input message="tns:GetGradingKeyRequest"/>
+			<output message="tns:GetGradingKeyResponse"/>
+			<fault name="fault" message="tns:SoapfaultMessage"/>
+		</operation>
+		<operation name="GetAllGradingKeys">
+			<documentation>Return the grading key object for a given grading key ID.</documentation>
+			<input message="tns:GetAllGradingKeysRequest"/>
+			<output message="tns:GetAllGradingKeysResponse"/>
+			<fault name="fault" message="tns:SoapfaultMessage"/>
+		</operation>
+		<operation name="AssignGradingKey">
+			<documentation>Assign a grading key to an individual exam.</documentation>
+			<input message="tns:AssignGradingKeyRequest"/>
+			<output message="tns:AssignGradingKeyResponse"/>
+			<fault name="fault" message="tns:SoapfaultMessage"/>
+		</operation>
+		<operation name="InsertGradingKey">
+			<documentation>Insert a grading key. The returned grading key object contains the grading key ID.</documentation>
+			<input message="tns:InsertGradingKeyRequest"/>
+			<output message="tns:InsertGradingKeyResponse"/>
+			<fault name="fault" message="tns:SoapfaultMessage"/>
+		</operation>
+		<operation name="UpdateGradingKey">
+			<documentation>Update a grading key.</documentation>
+			<input message="tns:UpdateGradingKeyRequest"/>
+			<output message="tns:UpdateGradingKeyResponse"/>
+			<fault name="fault" message="tns:SoapfaultMessage"/>
+		</operation>
+		<operation name="DeleteGradingKey">
+			<documentation>Delete a grading key.</documentation>
+			<input message="tns:DeleteGradingKeyRequest"/>
+			<output message="tns:DeleteGradingKeyResponse"/>
+			<fault name="fault" message="tns:SoapfaultMessage"/>
+		</operation>
+		<operation name="GetExamResults">
+			<documentation>Return the URL of the result export (CSV file) or the PDF report depending on the given export type parameter.</documentation>
+			<input message="tns:GetExamResultsRequest"/>
+			<output message="tns:GetExamResultsResponse"/>
+			<fault name="fault" message="tns:SoapfaultMessage"/>
+		</operation>
+		<operation name="DeleteExamFolder">
+			<documentation>Delete an exam folder including all exams.</documentation>
+			<input message="tns:DeleteExamFolderRequest"/>
+			<output message="tns:DeleteExamFolderResponse"/>
+			<fault name="fault" message="tns:SoapfaultMessage"/>
+		</operation>
+		<operation name="GetExam">
+			<documentation>Return an exam object for a given exam ID. The participant data of the exam get included by default but can be excluded.</documentation>
+			<input message="tns:GetExamRequest"/>
+			<output message="tns:GetExamResponse"/>
+			<fault name="fault" message="tns:SoapfaultMessage"/>
+		</operation>
+		<operation name="DeleteExam">
+			<documentation>Delete an exam including all exam results.</documentation>
+			<input message="tns:DeleteExamRequest"/>
+			<output message="tns:DeleteExamResponse"/>
+			<fault name="fault" message="tns:SoapfaultMessage"/>
+		</operation>
+		<operation name="InsertExam">
+			<documentation>Insert an exam for an exam user. The returned exam object contains the exam ID.</documentation>
+			<input message="tns:InsertExamRequest"/>
+			<output message="tns:InsertExamResponse"/>
+			<fault name="fault" message="tns:SoapfaultMessage"/>
+		</operation>
+		<operation name="SetScoring">
+			<documentation>Insert or update the scoring of an Exam sheet.</documentation>
+			<input message="tns:SetScoringRequest"/>
+			<output message="tns:SetScoringResponse"/>
+			<fault name="fault" message="tns:SoapfaultMessage"/>
+		</operation>
+		<operation name="UpdateExam">
+			<documentation>Update an exam.</documentation>
+			<input message="tns:UpdateExamRequest"/>
+			<output message="tns:UpdateExamResponse"/>
+			<fault name="fault" message="tns:SoapfaultMessage"/>
+		</operation>
+		<operation name="GetExamPswds">
+			<documentation>Return the URL of the Exam PSWD PDF file. PSWDs are only generated for online exams. This method won’t work for paper exams.</documentation>
+			<input message="tns:GetExamPswdsRequest"/>
+			<output message="tns:GetExamPswdsResponse"/>
+			<fault name="fault" message="tns:SoapfaultMessage"/>
+		</operation>
+		<operation name="GenerateExamPswds">
+			<documentation>Create new PSWDs for an exam and returns the URL of the Exam PSWD PDF file. PSWDs are only generated for online exams. This method won’t work for paper exams.</documentation>
+			<input message="tns:GenerateExamPswdsRequest"/>
+			<output message="tns:GenerateExamPswdsResponse"/>
+			<fault name="fault" message="tns:SoapfaultMessage"/>
+		</operation>
+		<operation name="GetExamPdf">
+			<documentation>Return the URL of the exam form PDF file. If the participants got pre-filled by participant import, the number of copies will be ignored. If no participants were imported, the number of copies should be given.</documentation>
+			<input message="tns:GetExamPdfRequest"/>
+			<output message="tns:GetExamPdfResponse"/>
+			<fault name="fault" message="tns:SoapfaultMessage"/>
+		</operation>
+		<operation name="GetExamGlobalSheetPdf">
+			<documentation>Return the URL of the Answersheet exam global form PDF file. This is only for one page answersheet exams. if the exam is not an answersheet, then the path will be empty. The global exam pdf has no serialnumber and can be copied and scanned.</documentation>
+			<input message="tns:GetExamGlobalSheetPdfRequest"/>
+			<output message="tns:GetExamGlobalSheetPdfResponse"/>
+			<fault name="fault" message="tns:SoapfaultMessage"/>
+		</operation>
+		<operation name="GetAnswerKeyByExamId">
+			<documentation>Return the URL of the exam sheet preview including the scoring (PDF file).</documentation>
+			<input message="tns:GetAnswerKeyByExamIdRequest"/>
+			<output message="tns:GetAnswerKeyByExamIdResponse"/>
+			<fault name="fault" message="tns:SoapfaultMessage"/>
+		</operation>
+		<operation name="GetAnswerKeyByFormId">
+			<documentation>Return the URL of the exam sheet preview including the scoring (PDF file).</documentation>
+			<input message="tns:GetAnswerKeyByFormIdRequest"/>
+			<output message="tns:GetAnswerKeyByFormIdResponse"/>
+			<fault name="fault" message="tns:SoapfaultMessage"/>
+		</operation>
+		<operation name="GetPreviewOfExamSheet">
+			<documentation>Return the URL of the exam sheet preview (PDF file). Note: This is only a sample PDF and cannot be used for exams.</documentation>
+			<input message="tns:GetPreviewOfExamSheetRequest"/>
+			<output message="tns:GetPreviewOfExamSheetResponse"/>
+			<fault name="fault" message="tns:SoapfaultMessage"/>
+		</operation>
+		<operation name="ExportExamSheet">
+			<documentation>Create an export file of the exam sheet. The export file can be used to import the exam sheet in a different system.</documentation>
+			<input message="tns:ExportExamSheetRequest"/>
+			<output message="tns:ExportExamSheetResponse"/>
+			<fault name="fault" message="tns:SoapfaultMessage"/>
+		</operation>
+		<operation name="GetAllExamSheets">
+			<documentation>Return a list of exam sheets for a given user ID. The exam sheet is the equivalent of the questionnaire in the system.</documentation>
+			<input message="tns:GetAllExamSheetsRequest"/>
+			<output message="tns:GetAllExamSheetsResponse"/>
+			<fault name="fault" message="tns:SoapfaultMessage"/>
+		</operation>
+		<operation name="DeleteExamSheet">
+			<documentation>Delete the exam sheet by the given exam sheet ID.</documentation>
+			<input message="tns:DeleteExamSheetRequest"/>
+			<output message="tns:DeleteExamSheetResponse"/>
+			<fault name="fault" message="tns:SoapfaultMessage"/>
+		</operation>
+		<operation name="GetExamSheet">
+			<documentation>Return the exam sheet object. The exam sheet is the equivalent of the questionnaire in the system.</documentation>
+			<input message="tns:GetExamSheetRequest"/>
+			<output message="tns:GetExamSheetResponse"/>
+			<fault name="fault" message="tns:SoapfaultMessage"/>
+		</operation>
+		<operation name="InsertExamSheet">
+			<documentation>Insert the exam sheet object.</documentation>
+			<input message="tns:InsertExamSheetRequest"/>
+			<output message="tns:InsertExamSheetResponse"/>
+			<fault name="fault" message="tns:SoapfaultMessage"/>
+		</operation>
+		<operation name="GetPswdsByExam">
+			<documentation>Returns the online access codes (PSWD) for the displayed exam ID encapsulated in a OnlineCode object. If the second parameter is 0, the predefined PSWDs will be returned. Should the number of requested PSWDs exceed the number of existing PSWDs, this method automatically creates new PSWDs.</documentation>
+			<input message="tns:GetPswdsByExamRequest"/>
+			<output message="tns:GetPswdsByExamResponse"/>
+			<fault name="fault" message="tns:SoapfaultMessage"/>
+		</operation>
+		<operation name="GetSubunits">
+			<documentation>Gets all subunits which are stored in the database.</documentation>
+			<input message="tns:GetSubunitsRequest"/>
+			<output message="tns:GetSubunitsResponse"/>
+			<fault name="fault" message="tns:SoapfaultMessage"/>
+		</operation>
+		<operation name="InsertSubunit">
+			<documentation>Inserts the presented subunit into the database.</documentation>
+			<input message="tns:InsertSubunitRequest"/>
+			<output message="tns:InsertSubunitResponse"/>
+			<fault name="fault" message="tns:SoapfaultMessage"/>
+		</operation>
+		<operation name="CloseExam">
+			<documentation>Closes the exam referenced by its exam ID -&gt; further data collection is not possible for this exam.</documentation>
+			<input message="tns:CloseExamRequest"/>
+			<output message="tns:CloseExamResponse"/>
+			<fault name="fault" message="tns:SoapfaultMessage"/>
+		</operation>
+		<operation name="OpenExam">
+			<documentation>Opens the exam referenced by its exam ID -&gt; data collection is possible for this exam.</documentation>
+			<input message="tns:OpenExamRequest"/>
+			<output message="tns:OpenExamResponse"/>
+			<fault name="fault" message="tns:SoapfaultMessage"/>
+		</operation>
+		<operation name="IsPswdUnused">
+			<documentation>Checks whether the password shown is unused.</documentation>
+			<input message="tns:IsPswdUnusedRequest"/>
+			<output message="tns:IsPswdUnusedResponse"/>
+			<fault name="fault" message="tns:SoapfaultMessage"/>
+		</operation>
+		<operation name="GetPDFReport">
+			<documentation>Creates the PDF report for a exam and returns a hyperlink to the document.</documentation>
+			<input message="tns:GetPDFReportRequest"/>
+			<output message="tns:GetPDFReportResponse"/>
+			<fault name="fault" message="tns:SoapfaultMessage"/>
+		</operation>
+		<operation name="GetPswdsByParticipant">
+			<documentation>Returns unused online access codes (PSWD) for the shown email address. Closed exams are ignored.</documentation>
+			<input message="tns:GetPswdsByParticipantRequest"/>
+			<output message="tns:GetPswdsByParticipantResponse"/>
+			<fault name="fault" message="tns:SoapfaultMessage"/>
+		</operation>
+		<operation name="GetPDFPswd">
+			<documentation>Creates a PDF with the PSWDs (cards) and returns the hyperlink to the file.</documentation>
+			<input message="tns:GetPDFPswdRequest"/>
+			<output message="tns:GetPDFPswdResponse"/>
+			<fault name="fault" message="tns:SoapfaultMessage"/>
+		</operation>
+		<operation name="InsertUser">
+			<documentation>Inserts the user shown into the database.</documentation>
+			<input message="tns:InsertUserRequest"/>
+			<output message="tns:InsertUserResponse"/>
+			<fault name="fault" message="tns:SoapfaultMessage"/>
+		</operation>
+		<operation name="UpdateUser">
+			<documentation>Updates the presented user in the database.</documentation>
+			<input message="tns:UpdateUserRequest"/>
+			<output message="tns:UpdateUserResponse"/>
+			<fault name="fault" message="tns:SoapfaultMessage"/>
+		</operation>
+		<operation name="DeleteUser">
+			<documentation>Deletes a user including all (!) child elements (exams, exam results, etc.).</documentation>
+			<input message="tns:DeleteUserRequest"/>
+			<output message="tns:DeleteUserResponse"/>
+			<fault name="fault" message="tns:SoapfaultMessage"/>
+		</operation>
+		<operation name="GetUser">
+			<documentation>Returns user, referenced by his internal user ID, an external ID which was imported previously into the system or a username. If no user is found, an error is returned.</documentation>
+			<input message="tns:GetUserRequest"/>
+			<output message="tns:GetUserResponse"/>
+			<fault name="fault" message="tns:SoapfaultMessage"/>
+		</operation>
+		<operation name="GetUsersBySubunit">
+			<documentation>Returns all users of the subunit of the type examiner.</documentation>
+			<input message="tns:GetUsersBySubunitRequest"/>
+			<output message="tns:GetUsersBySubunitResponse"/>
+			<fault name="fault" message="tns:SoapfaultMessage"/>
+		</operation>
+		<operation name="GetSubunit">
+			<documentation>Gets a subunit by the name presented. Note: In the system it is possible to have two or more subunits with the same name, but this function only returns the first one. The boolean variable determines whether the parent object "subunit" will also contain child objects of the type "user".</documentation>
+			<input message="tns:GetSubunitRequest"/>
+			<output message="tns:GetSubunitResponse"/>
+			<fault name="fault" message="tns:SoapfaultMessage"/>
+		</operation>
+		<operation name="DeleteSubunit">
+			<documentation>Deletes a subunit including all (!) child elements (users, exams, exam results, etc.).</documentation>
+			<input message="tns:DeleteSubunitRequest"/>
+			<output message="tns:DeleteSubunitResponse"/>
+			<fault name="fault" message="tns:SoapfaultMessage"/>
+		</operation>
+		<operation name="DeleteUnusedPswds">
+			<documentation>Deletes the presented passwords from the database and returns a list of the deleted PSWDs. Only unused PSWDs are deleted -&gt; this is why the deleted PSWDs are returned.</documentation>
+			<input message="tns:DeleteUnusedPswdsRequest"/>
+			<output message="tns:DeleteUnusedPswdsResponse"/>
+			<fault name="fault" message="tns:SoapfaultMessage"/>
+		</operation>
+		<operation name="GetSimpleForm">
+			<documentation>Returns a simplified version of the form referenced to by the form ID.</documentation>
+			<input message="tns:GetSimpleFormRequest"/>
+			<output message="tns:GetSimpleFormResponse"/>
+			<fault name="fault" message="tns:SoapfaultMessage"/>
+		</operation>
+		<operation name="GetAccessibleSubunitsForSubunitAdmin">
+			<documentation>Returns all accessible subunits for the presented user ID (only for subunit administrators)</documentation>
+			<input message="tns:GetAccessibleSubunitsForSubunitAdminRequest"/>
+			<output message="tns:GetAccessibleSubunitsForSubunitAdminResponse"/>
+			<fault name="fault" message="tns:SoapfaultMessage"/>
+		</operation>
+		<operation name="GetVFD">
+			<documentation>The function exports a form into an .vfd (=VFD/VividForms form definition file ) file and returns a link to it.</documentation>
+			<input message="tns:GetVFDRequest"/>
+			<output message="tns:GetVFDResponse"/>
+			<fault name="fault" message="tns:SoapfaultMessage"/>
+		</operation>
+		<operation name="GetExamOriginalScansPDF">
+			<documentation>Create the original scans PDF for an exam / batch and return the link to the PDF.</documentation>
+			<input message="tns:GetExamOriginalScansPDFRequest"/>
+			<output message="tns:GetExamOriginalScansPDFResponse"/>
+			<fault name="fault" message="tns:SoapfaultMessage"/>
+		</operation>
+		<operation name="GetWebscanBatchList">
+			<documentation>Get a list of all unfinished scan upload batches of a specific user. If specific batch-status-Ids are given(optional), then all batches with the given status will be delivered.</documentation>
+			<input message="tns:GetWebscanBatchListRequest"/>
+			<output message="tns:GetWebscanBatchListResponse"/>
+			<fault name="fault" message="tns:SoapfaultMessage"/>
+		</operation>
+		<operation name="ApplyActionOnWebscanBatch">
+			<documentation>Apply the given action on a scan upload batch. Possible actions are determined by calling the GetWebscanBatchList transaction.</documentation>
+			<input message="tns:ApplyActionOnWebscanBatchRequest"/>
+			<output message="tns:ApplyActionOnWebscanBatchResponse"/>
+			<fault name="fault" message="tns:SoapfaultMessage"/>
+		</operation>
+		<operation name="GetCSVRawData">
+			<documentation>Creates the CSV export file of the exam and returns the link to the file.</documentation>
+			<input message="tns:GetCSVRawDataRequest"/>
+			<output message="tns:GetCSVRawDataResponse"/>
+			<fault name="fault" message="tns:SoapfaultMessage"/>
+		</operation>
+		<operation name="GetOnlineExamLinkByParticipant">
+			<documentation>Returns a direct link to an online exam for a participant (including PSWD).</documentation>
+			<input message="tns:GetOnlineExamLinkByParticipantRequest"/>
+			<output message="tns:GetOnlineExamLinkByParticipantResponse"/>
+			<fault name="fault" message="tns:SoapfaultMessage"/>
+		</operation>
+		<operation name="GetSessionForUser">
+			<documentation>Returns a session for a given user ID. The session object contains the session ID, the server URL and the user start page. This method can be used to authenticate users via SOAP.</documentation>
+			<input message="tns:GetSessionForUserRequest"/>
+			<output message="tns:GetSessionForUserResponse"/>
+			<fault name="fault" message="tns:SoapfaultMessage"/>
+		</operation>
+		<operation name="GetExamTypes">
+			<documentation>Exam types are hard-coded single characters and will never be changed. Due to performance reasons, it is not recommended to call this transaction continuously in live systems.</documentation>
+			<input message="tns:GetExamTypesRequest"/>
+			<output message="tns:GetExamTypesResponse"/>
+			<fault name="fault" message="tns:SoapfaultMessage"/>
+		</operation>
+		<operation name="AddEMailsToQueue">
+			<documentation>Add one or more e-mails to the queue.</documentation>
+			<input message="tns:AddEMailsToQueueRequest"/>
+			<output message="tns:AddEMailsToQueueResponse"/>
+			<fault name="fault" message="tns:SoapfaultMessage"/>
+		</operation>
+		<operation name="GetEMailsByIDList">
+			<documentation>Get a list of e-mails by the given list of IDs. (Status: 0 - pending; 1 - delivered; 2 - undelivered)</documentation>
+			<input message="tns:GetEMailsByIDListRequest"/>
+			<output message="tns:GetEMailsByIDListResponse"/>
+			<fault name="fault" message="tns:SoapfaultMessage"/>
+		</operation>
+		<operation name="GetEMailSummaryByCreationDate">
+			<documentation>Get a summary of all pending, delivered and undelivered e-mails by a given date.</documentation>
+			<input message="tns:GetEMailSummaryByCreationDateRequest"/>
+			<output message="tns:GetEMailSummaryByCreationDateResponse"/>
+			<fault name="fault" message="tns:SoapfaultMessage"/>
+		</operation>
+		<operation name="GetVerifierInfoBySurvey">
+			<documentation>Returns detailed information about the pending verification of the exam. There is data about the exam, batch, sheet, question and answer, including the coordinates of detected marks. With this data it is possible to monitor the verification or to get all data and continue an external process.</documentation>
+			<input message="tns:GetVerifierInfoBySurveyRequest"/>
+			<output message="tns:GetVerifierInfoBySurveyResponse"/>
+			<fault name="fault" message="tns:SoapfaultMessage"/>
+		</operation>
+		<operation name="GetVerifierInfoBySerialNumber">
+			<documentation>Returns detailed information about the pending verification of a single participant by serial number. There is data about the exam, batch, sheet, question and answer, including the coordinates of detected marks. With this data it is possible to monitor the verification or to get all data and continue an external process.</documentation>
+			<input message="tns:GetVerifierInfoBySerialNumberRequest"/>
+			<output message="tns:GetVerifierInfoBySerialNumberResponse"/>
+			<fault name="fault" message="tns:SoapfaultMessage"/>
+		</operation>
+		<operation name="GetVerifierInfoByParticipant">
+			<documentation>Returns detailed information about the pending verification of a single participant by email address. There is data about the exam, batch, sheet, question and answer, including the coordinates of detected marks. With this data it is possible to monitor the verification or to get all data and continue an external process.</documentation>
+			<input message="tns:GetVerifierInfoByParticipantRequest"/>
+			<output message="tns:GetVerifierInfoByParticipantResponse"/>
+			<fault name="fault" message="tns:SoapfaultMessage"/>
+		</operation>
+		<operation name="GetVerifierInfoByBatch">
+			<documentation>Returns detailed information about the pending verification of the batch. There is data about the exam, batch, sheet, question and answer, including the coordinates of detected marks. With this data it is possible to monitor the verification or to get all data and continue an external process.</documentation>
+			<input message="tns:GetVerifierInfoByBatchRequest"/>
+			<output message="tns:GetVerifierInfoByBatchResponse"/>
+			<fault name="fault" message="tns:SoapfaultMessage"/>
+		</operation>
+		<operation name="GetUserSessionInfo">
+			<documentation>Returns the relevant information for an existing session. Optionally the session can be resumed.</documentation>
+			<input message="tns:GetUserSessionInfoRequest"/>
+			<output message="tns:GetUserSessionInfoResponse"/>
+			<fault name="fault" message="tns:SoapfaultMessage"/>
+		</operation>
+		<operation name="GetConfigurationInfo">
+			<documentation>Returns the relevant configuration options for an existing user.</documentation>
+			<input message="tns:GetConfigurationInfoRequest"/>
+			<output message="tns:GetConfigurationInfoResponse"/>
+			<fault name="fault" message="tns:SoapfaultMessage"/>
+		</operation>
+		<operation name="DeleteForms">
+			<documentation>Deletes a list of forms (max. 100). Only unused forms are deleted.</documentation>
+			<input message="tns:DeleteFormsRequest"/>
+			<output message="tns:DeleteFormsResponse"/>
+			<fault name="fault" message="tns:SoapfaultMessage"/>
+		</operation>
+		<operation name="GetUserByLogin">
+			<documentation>Returns user, referenced by login and password. If no user is found or the password is wrong a message is shown. 3 invalid login attempts for a specific login, lead to a 15 min blockade.</documentation>
+			<input message="tns:GetUserByLoginRequest"/>
+			<output message="tns:GetUserByLoginResponse"/>
+			<fault name="fault" message="tns:SoapfaultMessage"/>
+		</operation>
+		<operation name="ResetExam">
+			<documentation>Resets the data of an exam. All exam results are deleted!</documentation>
+			<input message="tns:ResetExamRequest"/>
+			<output message="tns:ResetExamResponse"/>
+			<fault name="fault" message="tns:SoapfaultMessage"/>
+		</operation>
+		<operation name="AssignVolumeToSubunit">
+			<documentation>This method assigns volume to a subunit, which can be completely used by that subunit.</documentation>
+			<input message="tns:AssignVolumeToSubunitRequest"/>
+			<output message="tns:AssignVolumeToSubunitResponse"/>
+			<fault name="fault" message="tns:SoapfaultMessage"/>
+		</operation>
+		<operation name="GetAllTextTemplateIDs">
+			<documentation>Returns a list of all available text templates in the system. The content for the text template can be requested with the transaction "GetTextTemplateById".</documentation>
+			<input message="tns:GetAllTextTemplateIDsRequest"/>
+			<output message="tns:GetAllTextTemplateIDsResponse"/>
+			<fault name="fault" message="tns:SoapfaultMessage"/>
+		</operation>
+		<operation name="GetTextTemplateById">
+			<documentation>Returns a text template by the given Id. Optionally by giving a form ID, the form specific text template is delivered. The result includes the text template contents for all system languages.</documentation>
+			<input message="tns:GetTextTemplateByIdRequest"/>
+			<output message="tns:GetTextTemplateByIdResponse"/>
+			<fault name="fault" message="tns:SoapfaultMessage"/>
+		</operation>
+		<operation name="GetUserByIdConsiderExternalID">
+			<documentation>Returns a list of system users, where all users in this list has the same external id referenced by an internal user ID, an external ID which was imported previously into the system or a the system user name. If no user is found, an error is returned.</documentation>
+			<input message="tns:GetUserByIdConsiderExternalIDRequest"/>
+			<output message="tns:GetUserByIdConsiderExternalIDResponse"/>
+			<fault name="fault" message="tns:SoapfaultMessage"/>
+		</operation>
+		<operation name="SaveCustomUserSetting">
+			<documentation>Inserts or updates a setting for the given key. The key can be up to 255 characters. The value can contain any text like JSON, array or simple text. The settings are bound to the current SOAP user.</documentation>
+			<input message="tns:SaveCustomUserSettingRequest"/>
+			<output message="tns:SaveCustomUserSettingResponse"/>
+			<fault name="fault" message="tns:SoapfaultMessage"/>
+		</operation>
+		<operation name="DeleteCustomUserSetting">
+			<documentation>Deletes a setting for the given key. The settings are bound to the current SOAP user.</documentation>
+			<input message="tns:DeleteCustomUserSettingRequest"/>
+			<output message="tns:DeleteCustomUserSettingResponse"/>
+			<fault name="fault" message="tns:SoapfaultMessage"/>
+		</operation>
+		<operation name="GetCustomUserSetting">
+			<documentation>Gets a setting for the given key. The settings are bound to the current SOAP user.</documentation>
+			<input message="tns:GetCustomUserSettingRequest"/>
+			<output message="tns:GetCustomUserSettingResponse"/>
+			<fault name="fault" message="tns:SoapfaultMessage"/>
+		</operation>
+		<operation name="GetCustomUserSettingsList">
+			<documentation>Returns a list of all settings. The settings are bound to the current SOAP user.</documentation>
+			<input message="tns:GetCustomUserSettingsListRequest"/>
+			<output message="tns:GetCustomUserSettingsListResponse"/>
+			<fault name="fault" message="tns:SoapfaultMessage"/>
+		</operation>
+		<operation name="GetReaderScanBatchList">
+			<documentation>Returns a list (JSON) with detailed information of all scanned batches in the Scanstation.</documentation>
+			<input message="tns:GetReaderScanBatchListRequest"/>
+			<output message="tns:GetReaderScanBatchListResponse"/>
+			<fault name="fault" message="tns:SoapfaultMessage"/>
+		</operation>
+		<operation name="GetLicenseInformation">
+			<documentation>Returns a list of relevant license information, which might be used to distinguish between different system environments.</documentation>
+			<input message="tns:GetLicenseInformationRequest"/>
+			<output message="tns:GetLicenseInformationResponse"/>
+			<fault name="fault" message="tns:SoapfaultMessage"/>
+		</operation>
+		<operation name="GetAllAvailableTransactionsByUserLogin">
+			<documentation>Returns a list of all transactions and the information if the specified user has the transaction right to call it.</documentation>
+			<input message="tns:GetAllAvailableTransactionsByUserLoginRequest"/>
+			<output message="tns:GetAllAvailableTransactionsByUserLoginResponse"/>
+			<fault name="fault" message="tns:SoapfaultMessage"/>
+		</operation>
+		<operation name="GetEntitiesByKeyword">
+			<documentation>Returns a list of entity information by the given keyword. This transaction allows a full text search for information within the most important entities (Subunits, Users, Courses, Surveys, Participants, Logs, Deliveries, Notices, Results). For the parameter "Keyword" a wildcard "[*]" may be used as a substitute for zero or more characters.</documentation>
+			<input message="tns:GetEntitiesByKeywordRequest"/>
+			<output message="tns:GetEntitiesByKeywordResponse"/>
+			<fault name="fault" message="tns:SoapfaultMessage"/>
+		</operation>
+		<operation name="GetUserIdsByParams">
+			<documentation>Returns a list of user IDs by the given parameters (UserIds, Types, LoginName, ExternalID, Title, FirstName, SurName, UnitName, Email, Subunits, ActiveUsers). For the parameters LoginName, ExternalID, Title, FirstName, SurName, UnitName, or Email a wildcard "[*]" may be used as a substitute for zero or more characters. If ExtendedResponseAsJSON is set, a json string is returned with more information about the user. The result can be ordered by each returned field.</documentation>
+			<input message="tns:GetUserIdsByParamsRequest"/>
+			<output message="tns:GetUserIdsByParamsResponse"/>
+			<fault name="fault" message="tns:SoapfaultMessage"/>
+		</operation>
+		<operation name="GetSoapUsage">
+			<documentation>Returns the amount of SOAP request since a timestamp.</documentation>
+			<input message="tns:GetSoapUsageRequest"/>
+			<output message="tns:GetSoapUsageResponse"/>
+			<fault name="fault" message="tns:SoapfaultMessage"/>
+		</operation>
+		<operation name="UpdateProfileImage">
+			<documentation>Sets an image for an user account based on the internal user ID that is loaded from an URL or an accessible local server path. If an empty string is passed for the path, only the previous image is removed.</documentation>
+			<input message="tns:UpdateProfileImageRequest"/>
+			<output message="tns:UpdateProfileImageResponse"/>
+			<fault name="fault" message="tns:SoapfaultMessage"/>
+		</operation>
+		<operation name="DestroySessionForUser">
+			<documentation>Destroys a session of an user by internal user ID.</documentation>
+			<input message="tns:DestroySessionForUserRequest"/>
+			<output message="tns:DestroySessionForUserResponse"/>
+			<fault name="fault" message="tns:SoapfaultMessage"/>
+		</operation>
+		<operation name="GetOnlineQRCode">
+			<documentation>Returns a link of the QR Code for online quizes.</documentation>
+			<input message="tns:GetOnlineQRCodeRequest"/>
+			<output message="tns:GetOnlineQRCodeResponse"/>
+			<fault name="fault" message="tns:SoapfaultMessage"/>
+		</operation>
+		<operation name="GetScoring">
+			<documentation>Returns the maximum score for each item, item group and the whole exam.</documentation>
+			<input message="tns:GetScoringRequest"/>
+			<output message="tns:GetScoringResponse"/>
+			<fault name="fault" message="tns:SoapfaultMessage"/>
+		</operation>
+		<operation name="GetSubunitLogos">
+			<documentation>Returns the logo images for all subunits.</documentation>
+			<input message="tns:GetSubunitLogosRequest"/>
+			<output message="tns:GetSubunitLogosResponse"/>
+			<fault name="fault" message="tns:SoapfaultMessage"/>
+		</operation>
+		<operation name="UpdateSubunit">
+			<documentation>Updates the presented subunit. Please note: Child objects of type "User" will not be updated by this method.</documentation>
+			<input message="tns:UpdateSubunitRequest"/>
+			<output message="tns:UpdateSubunitResponse"/>
+			<fault name="fault" message="tns:SoapfaultMessage"/>
+		</operation>
+		<operation name="DeleteOldLogEntries">
+			<documentation>Deletes all log entries from database which are older than the given X days.</documentation>
+			<input message="tns:DeleteOldLogEntriesRequest"/>
+			<output message="tns:DeleteOldLogEntriesResponse"/>
+			<fault name="fault" message="tns:SoapfaultMessage"/>
+		</operation>
+		<operation name="DeleteOldActivityLogEntries">
+			<documentation>Deletes all activities from database which are older than the given X days.</documentation>
+			<input message="tns:DeleteOldActivityLogEntriesRequest"/>
+			<output message="tns:DeleteOldActivityLogEntriesResponse"/>
+			<fault name="fault" message="tns:SoapfaultMessage"/>
+		</operation>
+		<operation name="GetActivityLogEntries">
+			<documentation>returns the activity log entries from database using the given parameters</documentation>
+			<input message="tns:GetActivityLogEntriesRequest"/>
+			<output message="tns:GetActivityLogEntriesResponse"/>
+			<fault name="fault" message="tns:SoapfaultMessage"/>
+		</operation>
+		<operation name="DeleteOldDeliveries">
+			<documentation>Deletes all deliveries from database which are older than the given X days.</documentation>
+			<input message="tns:DeleteOldDeliveriesRequest"/>
+			<output message="tns:DeleteOldDeliveriesResponse"/>
+			<fault name="fault" message="tns:SoapfaultMessage"/>
+		</operation>
+		<operation name="getExamIdsByParams">
+			<documentation>Deletes all deliveries from database which are older than the given X days.</documentation>
+			<input message="tns:getExamIdsByParamsRequest"/>
+			<output message="tns:getExamIdsByParamsResponse"/>
+			<fault name="fault" message="tns:SoapfaultMessage"/>
+		</operation>
+	</portType>
+
+	<binding name="Binding" type="tns:SoapPort">
+		<soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<operation name="RequestTicket">
+			<soap:operation soapAction="urn:soap#soap"/>
+			<input><soap:body use="literal" namespace="examsoapserver"/></input>
+			<output><soap:body use="literal" namespace="examsoapserver"/></output>
+			<fault name="fault"><soap:body use="literal"/></fault>
+		</operation>
+		<operation name="GetExamFolder">
+			<soap:operation soapAction="urn:soap#soap"/>
+			<input>
+				<soap:header use="literal" message="tns:Header" part="Header"/>
+				<soap:body use="literal" namespace="examsoapserver"/>
+			</input>
+			<output><soap:body use="literal" namespace="examsoapserver"/></output>
+			<fault name="fault"><soap:body use="literal"/></fault>
+		</operation>
+		<operation name="InsertExamFolder">
+			<soap:operation soapAction="urn:soap#soap"/>
+			<input>
+				<soap:header use="literal" message="tns:Header" part="Header"/>
+				<soap:body use="literal" namespace="examsoapserver"/>
+			</input>
+			<output><soap:body use="literal" namespace="examsoapserver"/></output>
+			<fault name="fault"><soap:body use="literal"/></fault>
+		</operation>
+		<operation name="UpdateExamFolder">
+			<soap:operation soapAction="urn:soap#soap"/>
+			<input>
+				<soap:header use="literal" message="tns:Header" part="Header"/>
+				<soap:body use="literal" namespace="examsoapserver"/>
+			</input>
+			<output><soap:body use="literal" namespace="examsoapserver"/></output>
+			<fault name="fault"><soap:body use="literal"/></fault>
+		</operation>
+		<operation name="GetAllExamFolders">
+			<soap:operation soapAction="urn:soap#soap"/>
+			<input>
+				<soap:header use="literal" message="tns:Header" part="Header"/>
+				<soap:body use="literal" namespace="examsoapserver"/>
+			</input>
+			<output><soap:body use="literal" namespace="examsoapserver"/></output>
+			<fault name="fault"><soap:body use="literal"/></fault>
+		</operation>
+		<operation name="GetAllExamsByFolderId">
+			<soap:operation soapAction="urn:soap#soap"/>
+			<input>
+				<soap:header use="literal" message="tns:Header" part="Header"/>
+				<soap:body use="literal" namespace="examsoapserver"/>
+			</input>
+			<output><soap:body use="literal" namespace="examsoapserver"/></output>
+			<fault name="fault"><soap:body use="literal"/></fault>
+		</operation>
+		<operation name="GetGradingKey">
+			<soap:operation soapAction="urn:soap#soap"/>
+			<input>
+				<soap:header use="literal" message="tns:Header" part="Header"/>
+				<soap:body use="literal" namespace="examsoapserver"/>
+			</input>
+			<output><soap:body use="literal" namespace="examsoapserver"/></output>
+			<fault name="fault"><soap:body use="literal"/></fault>
+		</operation>
+		<operation name="GetAllGradingKeys">
+			<soap:operation soapAction="urn:soap#soap"/>
+			<input>
+				<soap:header use="literal" message="tns:Header" part="Header"/>
+				<soap:body use="literal" namespace="examsoapserver"/>
+			</input>
+			<output><soap:body use="literal" namespace="examsoapserver"/></output>
+			<fault name="fault"><soap:body use="literal"/></fault>
+		</operation>
+		<operation name="AssignGradingKey">
+			<soap:operation soapAction="urn:soap#soap"/>
+			<input>
+				<soap:header use="literal" message="tns:Header" part="Header"/>
+				<soap:body use="literal" namespace="examsoapserver"/>
+			</input>
+			<output><soap:body use="literal" namespace="examsoapserver"/></output>
+			<fault name="fault"><soap:body use="literal"/></fault>
+		</operation>
+		<operation name="InsertGradingKey">
+			<soap:operation soapAction="urn:soap#soap"/>
+			<input>
+				<soap:header use="literal" message="tns:Header" part="Header"/>
+				<soap:body use="literal" namespace="examsoapserver"/>
+			</input>
+			<output><soap:body use="literal" namespace="examsoapserver"/></output>
+			<fault name="fault"><soap:body use="literal"/></fault>
+		</operation>
+		<operation name="UpdateGradingKey">
+			<soap:operation soapAction="urn:soap#soap"/>
+			<input>
+				<soap:header use="literal" message="tns:Header" part="Header"/>
+				<soap:body use="literal" namespace="examsoapserver"/>
+			</input>
+			<output><soap:body use="literal" namespace="examsoapserver"/></output>
+			<fault name="fault"><soap:body use="literal"/></fault>
+		</operation>
+		<operation name="DeleteGradingKey">
+			<soap:operation soapAction="urn:soap#soap"/>
+			<input>
+				<soap:header use="literal" message="tns:Header" part="Header"/>
+				<soap:body use="literal" namespace="examsoapserver"/>
+			</input>
+			<output><soap:body use="literal" namespace="examsoapserver"/></output>
+			<fault name="fault"><soap:body use="literal"/></fault>
+		</operation>
+		<operation name="GetExamResults">
+			<soap:operation soapAction="urn:soap#soap"/>
+			<input>
+				<soap:header use="literal" message="tns:Header" part="Header"/>
+				<soap:body use="literal" namespace="examsoapserver"/>
+			</input>
+			<output><soap:body use="literal" namespace="examsoapserver"/></output>
+			<fault name="fault"><soap:body use="literal"/></fault>
+		</operation>
+		<operation name="DeleteExamFolder">
+			<soap:operation soapAction="urn:soap#soap"/>
+			<input>
+				<soap:header use="literal" message="tns:Header" part="Header"/>
+				<soap:body use="literal" namespace="examsoapserver"/>
+			</input>
+			<output><soap:body use="literal" namespace="examsoapserver"/></output>
+			<fault name="fault"><soap:body use="literal"/></fault>
+		</operation>
+		<operation name="GetExam">
+			<soap:operation soapAction="urn:soap#soap"/>
+			<input>
+				<soap:header use="literal" message="tns:Header" part="Header"/>
+				<soap:body use="literal" namespace="examsoapserver"/>
+			</input>
+			<output><soap:body use="literal" namespace="examsoapserver"/></output>
+			<fault name="fault"><soap:body use="literal"/></fault>
+		</operation>
+		<operation name="DeleteExam">
+			<soap:operation soapAction="urn:soap#soap"/>
+			<input>
+				<soap:header use="literal" message="tns:Header" part="Header"/>
+				<soap:body use="literal" namespace="examsoapserver"/>
+			</input>
+			<output><soap:body use="literal" namespace="examsoapserver"/></output>
+			<fault name="fault"><soap:body use="literal"/></fault>
+		</operation>
+		<operation name="InsertExam">
+			<soap:operation soapAction="urn:soap#soap"/>
+			<input>
+				<soap:header use="literal" message="tns:Header" part="Header"/>
+				<soap:body use="literal" namespace="examsoapserver"/>
+			</input>
+			<output><soap:body use="literal" namespace="examsoapserver"/></output>
+			<fault name="fault"><soap:body use="literal"/></fault>
+		</operation>
+		<operation name="SetScoring">
+			<soap:operation soapAction="urn:soap#soap"/>
+			<input>
+				<soap:header use="literal" message="tns:Header" part="Header"/>
+				<soap:body use="literal" namespace="examsoapserver"/>
+			</input>
+			<output><soap:body use="literal" namespace="examsoapserver"/></output>
+			<fault name="fault"><soap:body use="literal"/></fault>
+		</operation>
+		<operation name="UpdateExam">
+			<soap:operation soapAction="urn:soap#soap"/>
+			<input>
+				<soap:header use="literal" message="tns:Header" part="Header"/>
+				<soap:body use="literal" namespace="examsoapserver"/>
+			</input>
+			<output><soap:body use="literal" namespace="examsoapserver"/></output>
+			<fault name="fault"><soap:body use="literal"/></fault>
+		</operation>
+		<operation name="GetExamPswds">
+			<soap:operation soapAction="urn:soap#soap"/>
+			<input>
+				<soap:header use="literal" message="tns:Header" part="Header"/>
+				<soap:body use="literal" namespace="examsoapserver"/>
+			</input>
+			<output><soap:body use="literal" namespace="examsoapserver"/></output>
+			<fault name="fault"><soap:body use="literal"/></fault>
+		</operation>
+		<operation name="GenerateExamPswds">
+			<soap:operation soapAction="urn:soap#soap"/>
+			<input>
+				<soap:header use="literal" message="tns:Header" part="Header"/>
+				<soap:body use="literal" namespace="examsoapserver"/>
+			</input>
+			<output><soap:body use="literal" namespace="examsoapserver"/></output>
+			<fault name="fault"><soap:body use="literal"/></fault>
+		</operation>
+		<operation name="GetExamPdf">
+			<soap:operation soapAction="urn:soap#soap"/>
+			<input>
+				<soap:header use="literal" message="tns:Header" part="Header"/>
+				<soap:body use="literal" namespace="examsoapserver"/>
+			</input>
+			<output><soap:body use="literal" namespace="examsoapserver"/></output>
+			<fault name="fault"><soap:body use="literal"/></fault>
+		</operation>
+
+
+		<operation name="GetExamGlobalSheetPdf">
+			<soap:operation soapAction="urn:soap#soap"/>
+			<input>
+				<soap:header use="literal" message="tns:Header" part="Header"/>
+				<soap:body use="literal" namespace="examsoapserver"/>
+			</input>
+			<output><soap:body use="literal" namespace="examsoapserver"/></output>
+			<fault name="fault"><soap:body use="literal"/></fault>
+		</operation>
+
+		<operation name="GetAnswerKeyByExamId">
+			<soap:operation soapAction="urn:soap#soap"/>
+			<input>
+				<soap:header use="literal" message="tns:Header" part="Header"/>
+				<soap:body use="literal" namespace="examsoapserver"/>
+			</input>
+			<output><soap:body use="literal" namespace="examsoapserver"/></output>
+			<fault name="fault"><soap:body use="literal"/></fault>
+		</operation>
+		<operation name="GetAnswerKeyByFormId">
+			<soap:operation soapAction="urn:soap#soap"/>
+			<input>
+				<soap:header use="literal" message="tns:Header" part="Header"/>
+				<soap:body use="literal" namespace="examsoapserver"/>
+			</input>
+			<output><soap:body use="literal" namespace="examsoapserver"/></output>
+			<fault name="fault"><soap:body use="literal"/></fault>
+		</operation>
+		<operation name="GetPreviewOfExamSheet">
+			<soap:operation soapAction="urn:soap#soap"/>
+			<input>
+				<soap:header use="literal" message="tns:Header" part="Header"/>
+				<soap:body use="literal" namespace="examsoapserver"/>
+			</input>
+			<output><soap:body use="literal" namespace="examsoapserver"/></output>
+			<fault name="fault"><soap:body use="literal"/></fault>
+		</operation>
+		<operation name="ExportExamSheet">
+			<soap:operation soapAction="urn:soap#soap"/>
+			<input>
+				<soap:header use="literal" message="tns:Header" part="Header"/>
+				<soap:body use="literal" namespace="examsoapserver"/>
+			</input>
+			<output><soap:body use="literal" namespace="examsoapserver"/></output>
+			<fault name="fault"><soap:body use="literal"/></fault>
+		</operation>
+		<operation name="GetAllExamSheets">
+			<soap:operation soapAction="urn:soap#soap"/>
+			<input>
+				<soap:header use="literal" message="tns:Header" part="Header"/>
+				<soap:body use="literal" namespace="examsoapserver"/>
+			</input>
+			<output><soap:body use="literal" namespace="examsoapserver"/></output>
+			<fault name="fault"><soap:body use="literal"/></fault>
+		</operation>
+		<operation name="DeleteExamSheet">
+			<soap:operation soapAction="urn:soap#soap"/>
+			<input>
+				<soap:header use="literal" message="tns:Header" part="Header"/>
+				<soap:body use="literal" namespace="examsoapserver"/>
+			</input>
+			<output><soap:body use="literal" namespace="examsoapserver"/></output>
+			<fault name="fault"><soap:body use="literal"/></fault>
+		</operation>
+		<operation name="GetExamSheet">
+			<soap:operation soapAction="urn:soap#soap"/>
+			<input>
+				<soap:header use="literal" message="tns:Header" part="Header"/>
+				<soap:body use="literal" namespace="examsoapserver"/>
+			</input>
+			<output><soap:body use="literal" namespace="examsoapserver"/></output>
+			<fault name="fault"><soap:body use="literal"/></fault>
+		</operation>
+		<operation name="InsertExamSheet">
+			<soap:operation soapAction="urn:soap#soap"/>
+			<input>
+				<soap:header use="literal" message="tns:Header" part="Header"/>
+				<soap:body use="literal" namespace="examsoapserver"/>
+			</input>
+			<output><soap:body use="literal" namespace="examsoapserver"/></output>
+			<fault name="fault"><soap:body use="literal"/></fault>
+		</operation>
+		<operation name="GetPswdsByExam">
+			<soap:operation soapAction="urn:soap#soap"/>
+			<input>
+				<soap:header use="literal" message="tns:Header" part="Header"/>
+				<soap:body use="literal" namespace="examsoapserver"/>
+			</input>
+			<output><soap:body use="literal" namespace="examsoapserver"/></output>
+			<fault name="fault"><soap:body use="literal"/></fault>
+		</operation>
+		<operation name="GetSubunits">
+			<soap:operation soapAction="urn:soap#soap"/>
+			<input>
+				<soap:header use="literal" message="tns:Header" part="Header"/>
+				<soap:body use="literal" namespace="examsoapserver"/>
+			</input>
+			<output><soap:body use="literal" namespace="examsoapserver"/></output>
+			<fault name="fault"><soap:body use="literal"/></fault>
+		</operation>
+		<operation name="InsertSubunit">
+			<soap:operation soapAction="urn:soap#soap"/>
+			<input>
+				<soap:header use="literal" message="tns:Header" part="Header"/>
+				<soap:body use="literal" namespace="examsoapserver"/>
+			</input>
+			<output><soap:body use="literal" namespace="examsoapserver"/></output>
+			<fault name="fault"><soap:body use="literal"/></fault>
+		</operation>
+		<operation name="CloseExam">
+			<soap:operation soapAction="urn:soap#soap"/>
+			<input>
+				<soap:header use="literal" message="tns:Header" part="Header"/>
+				<soap:body use="literal" namespace="examsoapserver"/>
+			</input>
+			<output><soap:body use="literal" namespace="examsoapserver"/></output>
+			<fault name="fault"><soap:body use="literal"/></fault>
+		</operation>
+		<operation name="OpenExam">
+			<soap:operation soapAction="urn:soap#soap"/>
+			<input>
+				<soap:header use="literal" message="tns:Header" part="Header"/>
+				<soap:body use="literal" namespace="examsoapserver"/>
+			</input>
+			<output><soap:body use="literal" namespace="examsoapserver"/></output>
+			<fault name="fault"><soap:body use="literal"/></fault>
+		</operation>
+		<operation name="IsPswdUnused">
+			<soap:operation soapAction="urn:soap#soap"/>
+			<input>
+				<soap:header use="literal" message="tns:Header" part="Header"/>
+				<soap:body use="literal" namespace="examsoapserver"/>
+			</input>
+			<output><soap:body use="literal" namespace="examsoapserver"/></output>
+			<fault name="fault"><soap:body use="literal"/></fault>
+		</operation>
+		<operation name="GetPDFReport">
+			<soap:operation soapAction="urn:soap#soap"/>
+			<input>
+				<soap:header use="literal" message="tns:Header" part="Header"/>
+				<soap:body use="literal" namespace="examsoapserver"/>
+			</input>
+			<output><soap:body use="literal" namespace="examsoapserver"/></output>
+			<fault name="fault"><soap:body use="literal"/></fault>
+		</operation>
+		<operation name="GetPswdsByParticipant">
+			<soap:operation soapAction="urn:soap#soap"/>
+			<input>
+				<soap:header use="literal" message="tns:Header" part="Header"/>
+				<soap:body use="literal" namespace="examsoapserver"/>
+			</input>
+			<output><soap:body use="literal" namespace="examsoapserver"/></output>
+			<fault name="fault"><soap:body use="literal"/></fault>
+		</operation>
+		<operation name="GetPDFPswd">
+			<soap:operation soapAction="urn:soap#soap"/>
+			<input>
+				<soap:header use="literal" message="tns:Header" part="Header"/>
+				<soap:body use="literal" namespace="examsoapserver"/>
+			</input>
+			<output><soap:body use="literal" namespace="examsoapserver"/></output>
+			<fault name="fault"><soap:body use="literal"/></fault>
+		</operation>
+		<operation name="InsertUser">
+			<soap:operation soapAction="urn:soap#soap"/>
+			<input>
+				<soap:header use="literal" message="tns:Header" part="Header"/>
+				<soap:body use="literal" namespace="examsoapserver"/>
+			</input>
+			<output><soap:body use="literal" namespace="examsoapserver"/></output>
+			<fault name="fault"><soap:body use="literal"/></fault>
+		</operation>
+		<operation name="UpdateUser">
+			<soap:operation soapAction="urn:soap#soap"/>
+			<input>
+				<soap:header use="literal" message="tns:Header" part="Header"/>
+				<soap:body use="literal" namespace="examsoapserver"/>
+			</input>
+			<output><soap:body use="literal" namespace="examsoapserver"/></output>
+			<fault name="fault"><soap:body use="literal"/></fault>
+		</operation>
+		<operation name="DeleteUser">
+			<soap:operation soapAction="urn:soap#soap"/>
+			<input>
+				<soap:header use="literal" message="tns:Header" part="Header"/>
+				<soap:body use="literal" namespace="examsoapserver"/>
+			</input>
+			<output><soap:body use="literal" namespace="examsoapserver"/></output>
+			<fault name="fault"><soap:body use="literal"/></fault>
+		</operation>
+		<operation name="GetUser">
+			<soap:operation soapAction="urn:soap#soap"/>
+			<input>
+				<soap:header use="literal" message="tns:Header" part="Header"/>
+				<soap:body use="literal" namespace="examsoapserver"/>
+			</input>
+			<output><soap:body use="literal" namespace="examsoapserver"/></output>
+			<fault name="fault"><soap:body use="literal"/></fault>
+		</operation>
+		<operation name="GetUsersBySubunit">
+			<soap:operation soapAction="urn:soap#soap"/>
+			<input>
+				<soap:header use="literal" message="tns:Header" part="Header"/>
+				<soap:body use="literal" namespace="examsoapserver"/>
+			</input>
+			<output><soap:body use="literal" namespace="examsoapserver"/></output>
+			<fault name="fault"><soap:body use="literal"/></fault>
+		</operation>
+		<operation name="GetSubunit">
+			<soap:operation soapAction="urn:soap#soap"/>
+			<input>
+				<soap:header use="literal" message="tns:Header" part="Header"/>
+				<soap:body use="literal" namespace="examsoapserver"/>
+			</input>
+			<output><soap:body use="literal" namespace="examsoapserver"/></output>
+			<fault name="fault"><soap:body use="literal"/></fault>
+		</operation>
+		<operation name="DeleteSubunit">
+			<soap:operation soapAction="urn:soap#soap"/>
+			<input>
+				<soap:header use="literal" message="tns:Header" part="Header"/>
+				<soap:body use="literal" namespace="examsoapserver"/>
+			</input>
+			<output><soap:body use="literal" namespace="examsoapserver"/></output>
+			<fault name="fault"><soap:body use="literal"/></fault>
+		</operation>
+		<operation name="DeleteUnusedPswds">
+			<soap:operation soapAction="urn:soap#soap"/>
+			<input>
+				<soap:header use="literal" message="tns:Header" part="Header"/>
+				<soap:body use="literal" namespace="examsoapserver"/>
+			</input>
+			<output><soap:body use="literal" namespace="examsoapserver"/></output>
+			<fault name="fault"><soap:body use="literal"/></fault>
+		</operation>
+		<operation name="GetSimpleForm">
+			<soap:operation soapAction="urn:soap#soap"/>
+			<input>
+				<soap:header use="literal" message="tns:Header" part="Header"/>
+				<soap:body use="literal" namespace="examsoapserver"/>
+			</input>
+			<output><soap:body use="literal" namespace="examsoapserver"/></output>
+			<fault name="fault"><soap:body use="literal"/></fault>
+		</operation>
+		<operation name="GetAccessibleSubunitsForSubunitAdmin">
+			<soap:operation soapAction="urn:soap#soap"/>
+			<input>
+				<soap:header use="literal" message="tns:Header" part="Header"/>
+				<soap:body use="literal" namespace="examsoapserver"/>
+			</input>
+			<output><soap:body use="literal" namespace="examsoapserver"/></output>
+			<fault name="fault"><soap:body use="literal"/></fault>
+		</operation>
+		<operation name="GetVFD">
+			<soap:operation soapAction="urn:soap#soap"/>
+			<input>
+				<soap:header use="literal" message="tns:Header" part="Header"/>
+				<soap:body use="literal" namespace="examsoapserver"/>
+			</input>
+			<output><soap:body use="literal" namespace="examsoapserver"/></output>
+			<fault name="fault"><soap:body use="literal"/></fault>
+		</operation>
+		<operation name="GetExamOriginalScansPDF">
+			<soap:operation soapAction="urn:soap#soap"/>
+			<input>
+				<soap:header use="literal" message="tns:Header" part="Header"/>
+				<soap:body use="literal" namespace="examsoapserver"/>
+			</input>
+			<output><soap:body use="literal" namespace="examsoapserver"/></output>
+			<fault name="fault"><soap:body use="literal"/></fault>
+		</operation>
+		<operation name="GetWebscanBatchList">
+			<soap:operation soapAction="urn:soap#soap"/>
+			<input>
+				<soap:header use="literal" message="tns:Header" part="Header"/>
+				<soap:body use="literal" namespace="examsoapserver"/>
+			</input>
+			<output><soap:body use="literal" namespace="examsoapserver"/></output>
+			<fault name="fault"><soap:body use="literal"/></fault>
+		</operation>
+		<operation name="ApplyActionOnWebscanBatch">
+			<soap:operation soapAction="urn:soap#soap"/>
+			<input>
+				<soap:header use="literal" message="tns:Header" part="Header"/>
+				<soap:body use="literal" namespace="examsoapserver"/>
+			</input>
+			<output><soap:body use="literal" namespace="examsoapserver"/></output>
+			<fault name="fault"><soap:body use="literal"/></fault>
+		</operation>
+		<operation name="GetCSVRawData">
+			<soap:operation soapAction="urn:soap#soap"/>
+			<input>
+				<soap:header use="literal" message="tns:Header" part="Header"/>
+				<soap:body use="literal" namespace="examsoapserver"/>
+			</input>
+			<output><soap:body use="literal" namespace="examsoapserver"/></output>
+			<fault name="fault"><soap:body use="literal"/></fault>
+		</operation>
+		<operation name="GetOnlineExamLinkByParticipant">
+			<soap:operation soapAction="urn:soap#soap"/>
+			<input>
+				<soap:header use="literal" message="tns:Header" part="Header"/>
+				<soap:body use="literal" namespace="examsoapserver"/>
+			</input>
+			<output><soap:body use="literal" namespace="examsoapserver"/></output>
+			<fault name="fault"><soap:body use="literal"/></fault>
+		</operation>
+		<operation name="GetSessionForUser">
+			<soap:operation soapAction="urn:soap#soap"/>
+			<input>
+				<soap:header use="literal" message="tns:Header" part="Header"/>
+				<soap:body use="literal" namespace="examsoapserver"/>
+			</input>
+			<output><soap:body use="literal" namespace="examsoapserver"/></output>
+			<fault name="fault"><soap:body use="literal"/></fault>
+		</operation>
+		<operation name="GetExamTypes">
+			<soap:operation soapAction="urn:soap#soap"/>
+			<input>
+				<soap:header use="literal" message="tns:Header" part="Header"/>
+				<soap:body use="literal" namespace="examsoapserver"/>
+			</input>
+			<output><soap:body use="literal" namespace="examsoapserver"/></output>
+			<fault name="fault"><soap:body use="literal"/></fault>
+		</operation>
+		<operation name="AddEMailsToQueue">
+			<soap:operation soapAction="urn:soap#soap"/>
+			<input>
+				<soap:header use="literal" message="tns:Header" part="Header"/>
+				<soap:body use="literal" namespace="examsoapserver"/>
+			</input>
+			<output><soap:body use="literal" namespace="examsoapserver"/></output>
+			<fault name="fault"><soap:body use="literal"/></fault>
+		</operation>
+		<operation name="GetEMailsByIDList">
+			<soap:operation soapAction="urn:soap#soap"/>
+			<input>
+				<soap:header use="literal" message="tns:Header" part="Header"/>
+				<soap:body use="literal" namespace="examsoapserver"/>
+			</input>
+			<output><soap:body use="literal" namespace="examsoapserver"/></output>
+			<fault name="fault"><soap:body use="literal"/></fault>
+		</operation>
+		<operation name="GetEMailSummaryByCreationDate">
+			<soap:operation soapAction="urn:soap#soap"/>
+			<input>
+				<soap:header use="literal" message="tns:Header" part="Header"/>
+				<soap:body use="literal" namespace="examsoapserver"/>
+			</input>
+			<output><soap:body use="literal" namespace="examsoapserver"/></output>
+			<fault name="fault"><soap:body use="literal"/></fault>
+		</operation>
+		<operation name="GetVerifierInfoBySurvey">
+			<soap:operation soapAction="urn:soap#soap"/>
+			<input>
+				<soap:header use="literal" message="tns:Header" part="Header"/>
+				<soap:body use="literal" namespace="examsoapserver"/>
+			</input>
+			<output><soap:body use="literal" namespace="examsoapserver"/></output>
+			<fault name="fault"><soap:body use="literal"/></fault>
+		</operation>
+		<operation name="GetVerifierInfoBySerialNumber">
+			<soap:operation soapAction="urn:soap#soap"/>
+			<input>
+				<soap:header use="literal" message="tns:Header" part="Header"/>
+				<soap:body use="literal" namespace="examsoapserver"/>
+			</input>
+			<output><soap:body use="literal" namespace="examsoapserver"/></output>
+			<fault name="fault"><soap:body use="literal"/></fault>
+		</operation>
+		<operation name="GetVerifierInfoByParticipant">
+			<soap:operation soapAction="urn:soap#soap"/>
+			<input>
+				<soap:header use="literal" message="tns:Header" part="Header"/>
+				<soap:body use="literal" namespace="examsoapserver"/>
+			</input>
+			<output><soap:body use="literal" namespace="examsoapserver"/></output>
+			<fault name="fault"><soap:body use="literal"/></fault>
+		</operation>
+		<operation name="GetVerifierInfoByBatch">
+			<soap:operation soapAction="urn:soap#soap"/>
+			<input>
+				<soap:header use="literal" message="tns:Header" part="Header"/>
+				<soap:body use="literal" namespace="examsoapserver"/>
+			</input>
+			<output><soap:body use="literal" namespace="examsoapserver"/></output>
+			<fault name="fault"><soap:body use="literal"/></fault>
+		</operation>
+		<operation name="GetUserSessionInfo">
+			<soap:operation soapAction="urn:soap#soap"/>
+			<input>
+				<soap:header use="literal" message="tns:Header" part="Header"/>
+				<soap:body use="literal" namespace="examsoapserver"/>
+			</input>
+			<output><soap:body use="literal" namespace="examsoapserver"/></output>
+			<fault name="fault"><soap:body use="literal"/></fault>
+		</operation>
+		<operation name="GetConfigurationInfo">
+			<soap:operation soapAction="urn:soap#soap"/>
+			<input>
+				<soap:header use="literal" message="tns:Header" part="Header"/>
+				<soap:body use="literal" namespace="examsoapserver"/>
+			</input>
+			<output><soap:body use="literal" namespace="examsoapserver"/></output>
+			<fault name="fault"><soap:body use="literal"/></fault>
+		</operation>
+		<operation name="DeleteForms">
+			<soap:operation soapAction="urn:soap#soap"/>
+			<input>
+				<soap:header use="literal" message="tns:Header" part="Header"/>
+				<soap:body use="literal" namespace="examsoapserver"/>
+			</input>
+			<output><soap:body use="literal" namespace="examsoapserver"/></output>
+			<fault name="fault"><soap:body use="literal"/></fault>
+		</operation>
+		<operation name="GetUserByLogin">
+			<soap:operation soapAction="urn:soap#soap"/>
+			<input>
+				<soap:header use="literal" message="tns:Header" part="Header"/>
+				<soap:body use="literal" namespace="examsoapserver"/>
+			</input>
+			<output><soap:body use="literal" namespace="examsoapserver"/></output>
+			<fault name="fault"><soap:body use="literal"/></fault>
+		</operation>
+		<operation name="ResetExam">
+			<soap:operation soapAction="urn:soap#soap"/>
+			<input>
+				<soap:header use="literal" message="tns:Header" part="Header"/>
+				<soap:body use="literal" namespace="examsoapserver"/>
+			</input>
+			<output><soap:body use="literal" namespace="examsoapserver"/></output>
+			<fault name="fault"><soap:body use="literal"/></fault>
+		</operation>
+		<operation name="AssignVolumeToSubunit">
+			<soap:operation soapAction="urn:soap#soap"/>
+			<input>
+				<soap:header use="literal" message="tns:Header" part="Header"/>
+				<soap:body use="literal" namespace="examsoapserver"/>
+			</input>
+			<output><soap:body use="literal" namespace="examsoapserver"/></output>
+			<fault name="fault"><soap:body use="literal"/></fault>
+		</operation>
+		<operation name="GetAllTextTemplateIDs">
+			<soap:operation soapAction="urn:soap#soap"/>
+			<input>
+				<soap:header use="literal" message="tns:Header" part="Header"/>
+				<soap:body use="literal" namespace="examsoapserver"/>
+			</input>
+			<output><soap:body use="literal" namespace="examsoapserver"/></output>
+			<fault name="fault"><soap:body use="literal"/></fault>
+		</operation>
+		<operation name="GetTextTemplateById">
+			<soap:operation soapAction="urn:soap#soap"/>
+			<input>
+				<soap:header use="literal" message="tns:Header" part="Header"/>
+				<soap:body use="literal" namespace="examsoapserver"/>
+			</input>
+			<output><soap:body use="literal" namespace="examsoapserver"/></output>
+			<fault name="fault"><soap:body use="literal"/></fault>
+		</operation>
+		<operation name="GetUserByIdConsiderExternalID">
+			<soap:operation soapAction="urn:soap#soap"/>
+			<input>
+				<soap:header use="literal" message="tns:Header" part="Header"/>
+				<soap:body use="literal" namespace="examsoapserver"/>
+			</input>
+			<output><soap:body use="literal" namespace="examsoapserver"/></output>
+			<fault name="fault"><soap:body use="literal"/></fault>
+		</operation>
+		<operation name="SaveCustomUserSetting">
+			<soap:operation soapAction="urn:soap#soap"/>
+			<input>
+				<soap:header use="literal" message="tns:Header" part="Header"/>
+				<soap:body use="literal" namespace="examsoapserver"/>
+			</input>
+			<output><soap:body use="literal" namespace="examsoapserver"/></output>
+			<fault name="fault"><soap:body use="literal"/></fault>
+		</operation>
+		<operation name="DeleteCustomUserSetting">
+			<soap:operation soapAction="urn:soap#soap"/>
+			<input>
+				<soap:header use="literal" message="tns:Header" part="Header"/>
+				<soap:body use="literal" namespace="examsoapserver"/>
+			</input>
+			<output><soap:body use="literal" namespace="examsoapserver"/></output>
+			<fault name="fault"><soap:body use="literal"/></fault>
+		</operation>
+		<operation name="GetCustomUserSetting">
+			<soap:operation soapAction="urn:soap#soap"/>
+			<input>
+				<soap:header use="literal" message="tns:Header" part="Header"/>
+				<soap:body use="literal" namespace="examsoapserver"/>
+			</input>
+			<output><soap:body use="literal" namespace="examsoapserver"/></output>
+			<fault name="fault"><soap:body use="literal"/></fault>
+		</operation>
+		<operation name="GetCustomUserSettingsList">
+			<soap:operation soapAction="urn:soap#soap"/>
+			<input>
+				<soap:header use="literal" message="tns:Header" part="Header"/>
+				<soap:body use="literal" namespace="examsoapserver"/>
+			</input>
+			<output><soap:body use="literal" namespace="examsoapserver"/></output>
+			<fault name="fault"><soap:body use="literal"/></fault>
+		</operation>
+		<operation name="GetReaderScanBatchList">
+			<soap:operation soapAction="urn:soap#soap"/>
+			<input>
+				<soap:header use="literal" message="tns:Header" part="Header"/>
+				<soap:body use="literal" namespace="examsoapserver"/>
+			</input>
+			<output><soap:body use="literal" namespace="examsoapserver"/></output>
+			<fault name="fault"><soap:body use="literal"/></fault>
+		</operation>
+		<operation name="GetLicenseInformation">
+			<soap:operation soapAction="urn:soap#soap"/>
+			<input>
+				<soap:header use="literal" message="tns:Header" part="Header"/>
+				<soap:body use="literal" namespace="examsoapserver"/>
+			</input>
+			<output><soap:body use="literal" namespace="examsoapserver"/></output>
+			<fault name="fault"><soap:body use="literal"/></fault>
+		</operation>
+		<operation name="GetAllAvailableTransactionsByUserLogin">
+			<soap:operation soapAction="urn:soap#soap"/>
+			<input>
+				<soap:header use="literal" message="tns:Header" part="Header"/>
+				<soap:body use="literal" namespace="examsoapserver"/>
+			</input>
+			<output><soap:body use="literal" namespace="examsoapserver"/></output>
+			<fault name="fault"><soap:body use="literal"/></fault>
+		</operation>
+		<operation name="GetEntitiesByKeyword">
+			<soap:operation soapAction="urn:soap#soap"/>
+			<input>
+				<soap:header use="literal" message="tns:Header" part="Header"/>
+				<soap:body use="literal" namespace="examsoapserver"/>
+			</input>
+			<output><soap:body use="literal" namespace="examsoapserver"/></output>
+			<fault name="fault"><soap:body use="literal"/></fault>
+		</operation>
+		<operation name="GetUserIdsByParams">
+			<soap:operation soapAction="urn:soap#soap"/>
+			<input>
+				<soap:header use="literal" message="tns:Header" part="Header"/>
+				<soap:body use="literal" namespace="examsoapserver"/>
+			</input>
+			<output><soap:body use="literal" namespace="examsoapserver"/></output>
+			<fault name="fault"><soap:body use="literal"/></fault>
+		</operation>
+		<operation name="GetSoapUsage">
+			<soap:operation soapAction="urn:soap#soap"/>
+			<input>
+				<soap:header use="literal" message="tns:Header" part="Header"/>
+				<soap:body use="literal" namespace="examsoapserver"/>
+			</input>
+			<output><soap:body use="literal" namespace="examsoapserver"/></output>
+			<fault name="fault"><soap:body use="literal"/></fault>
+		</operation>
+		<operation name="UpdateProfileImage">
+			<soap:operation soapAction="urn:soap#soap"/>
+			<input>
+				<soap:header use="literal" message="tns:Header" part="Header"/>
+				<soap:body use="literal" namespace="examsoapserver"/>
+			</input>
+			<output><soap:body use="literal" namespace="examsoapserver"/></output>
+			<fault name="fault"><soap:body use="literal"/></fault>
+		</operation>
+		<operation name="DestroySessionForUser">
+			<soap:operation soapAction="urn:soap#soap"/>
+			<input>
+				<soap:header use="literal" message="tns:Header" part="Header"/>
+				<soap:body use="literal" namespace="examsoapserver"/>
+			</input>
+			<output><soap:body use="literal" namespace="examsoapserver"/></output>
+			<fault name="fault"><soap:body use="literal"/></fault>
+		</operation>
+		<operation name="DeleteOldLogEntries">
+			<soap:operation soapAction="urn:soap#soap"/>
+			<input>
+				<soap:header use="literal" message="tns:Header" part="Header"/>
+				<soap:body use="literal" namespace="examsoapserver"/>
+			</input>
+			<output>
+				<soap:body use="literal" namespace="examsoapserver"/>
+			</output>
+			<fault name="fault"><soap:body use="literal"/></fault>
+		</operation>
+		<operation name="GetOnlineQRCode">
+			<soap:operation soapAction="urn:soap#soap"/>
+			<input>
+				<soap:header use="literal" message="tns:Header" part="Header"/>
+				<soap:body use="literal" namespace="examsoapserver"/>
+			</input>
+			<output>
+				<soap:body use="literal" namespace="examsoapserver"/>
+			</output>
+			<fault name="fault"><soap:body use="literal"/></fault>
+		</operation>
+		<operation name="GetScoring">
+			<soap:operation soapAction="urn:soap#soap"/>
+			<input>
+				<soap:header use="literal" message="tns:Header" part="Header"/>
+				<soap:body use="literal" namespace="examsoapserver"/>
+			</input>
+			<output>
+				<soap:body use="literal" namespace="examsoapserver"/>
+			</output>
+			<fault name="fault"><soap:body use="literal"/></fault>
+		</operation>
+		<operation name="GetSubunitLogos">
+			<soap:operation soapAction="urn:soap#soap"/>
+			<input>
+				<soap:header use="literal" message="tns:Header" part="Header"/>
+				<soap:body use="literal" namespace="examsoapserver"/>
+			</input>
+			<output>
+				<soap:body use="literal" namespace="examsoapserver"/>
+			</output>
+			<fault name="fault"><soap:body use="literal"/></fault>
+		</operation>
+		<operation name="UpdateSubunit">
+			<soap:operation soapAction="urn:soap#soap"/>
+			<input>
+				<soap:header use="literal" message="tns:Header" part="Header"/>
+				<soap:body use="literal" namespace="soapserver"/>
+			</input>
+			<output><soap:body use="literal" namespace="soapserver"/></output>
+			<fault name="fault"><soap:body use="literal"/></fault>
+		</operation>
+		<operation name="DeleteOldActivityLogEntries">
+			<soap:operation soapAction="urn:soap#soap"/>
+			<input>
+				<soap:header use="literal" message="tns:Header" part="Header"/>
+				<soap:body use="literal" namespace="examsoapserver"/>
+			</input>
+			<output>
+				<soap:body use="literal" namespace="examsoapserver"/>
+			</output>
+			<fault name="fault"><soap:body use="literal"/></fault>
+		</operation>
+		<operation name="GetActivityLogEntries">
+			<soap:operation soapAction="urn:soap#soap"/>
+			<input>
+				<soap:header use="literal" message="tns:Header" part="Header"/>
+				<soap:body use="literal" namespace="soapserver"/>
+			</input>
+			<output>
+				<soap:body use="literal" namespace="soapserver"/>
+			</output>
+			<fault name="fault"><soap:body use="literal"/></fault>
+		</operation>
+		<operation name="DeleteOldDeliveries">
+			<soap:operation soapAction="urn:soap#soap"/>
+			<input>
+				<soap:header use="literal" message="tns:Header" part="Header"/>
+				<soap:body use="literal" namespace="examsoapserver"/>
+			</input>
+			<output>
+				<soap:body use="literal" namespace="examsoapserver"/>
+			</output>
+			<fault name="fault"><soap:body use="literal"/></fault>
+		</operation>
+		<operation name="getExamIdsByParams">
+			<soap:operation soapAction="urn:soap#soap"/>
+			<input>
+				<soap:header use="literal" message="tns:Header" part="Header"/>
+				<soap:body use="literal" namespace="examsoapserver"/>
+			</input>
+			<output>
+				<soap:body use="literal" namespace="examsoapserver"/>
+			</output>
+			<fault name="fault"><soap:body use="literal"/></fault>
+		</operation>
+	</binding>
+
+	<service name="examsoapserver">
+		<port name="SoapPort" binding="tns:Binding">
+			<soap:address location="http://127.0.0.1/system_folder/services/examserver-v82.php"/>
+		</port>
+	</service>
+</wsdl:definitions>

@@ -1,0 +1,31 @@
+---
+title: "FAQ Klausuren Analyse"
+author: ""
+date: "2020-10-29"
+output: pdf_document
+always_allow_html: yes
+
+---
+
+```{r setup, include=FALSE}
+library(knitr)
+library(webshot)
+library(htmltools)
+#source("visualization.R")
+```
+
+
+! [Caption as](/pic/alpha1.png) 
+
+A plot of random points.
+
+```{r pressure, echo=FALSE, fig.cap="A caption", out.width = '100%'}
+knitr::include_graphics("/pic/alpha1.png")
+knitr::include_graphics("/pic/alpha2.png", error = FALSE)
+```
+
+```{r}
+p <- ggplot(data=iris)+
+  geom_point(mapping=aes(x=Petal.Length,y=Petal.Width))
+p
+```
